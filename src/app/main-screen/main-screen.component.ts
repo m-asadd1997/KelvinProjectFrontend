@@ -28,6 +28,7 @@ export class MainScreenComponent implements OnInit {
   constructor(private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+
     this.id = this.activateRoute.snapshot.params['id'];
     console.log(this.id)
 
@@ -40,6 +41,7 @@ export class MainScreenComponent implements OnInit {
     this.applicantService.getApplicantById(id).subscribe(d=>{
       this.appFormObj = d;
     })
+
   }
 
   openFile(){
@@ -53,6 +55,7 @@ export class MainScreenComponent implements OnInit {
   saveApplicantForm(){
     console.log("this is form data "+this.appFormObj)
     console.log(this.resume)
+
     if(this.id){
       this.applicantService.updateApplicantForm(this.id,this.appFormObj).subscribe(d=>{
         console.log(d);
@@ -66,19 +69,9 @@ export class MainScreenComponent implements OnInit {
     
     // this.createBase64String(this.appFormObj);
    
+
   }
-  handleFileSelect(evt){
-    var files = evt.target.files;
-    var file = files[0];
 
-  if (files && file) {
-      var reader = new FileReader();
-
-      reader.onload =this._handleReaderLoaded.bind(this);
-
-      reader.readAsBinaryString(file);
-  }
-}
 
 
 
@@ -88,8 +81,6 @@ _handleReaderLoaded(readerEvt) {
           //console.log(btoa(binaryString));
           this.appFormObj.resume = base64textString;
           console.log(this.appFormObj.resume)
-          this.appFormObj.userImage = base64textString;
-          console.log(this.appFormObj.userImage)
           
   }
   
@@ -102,8 +93,6 @@ _handleReaderLoaded(readerEvt) {
       reader.onload =this._handleReaderLoaded.bind(this);
       this.appFormObj.resumeContentType = file.type
       console.log("1"+this.appFormObj.resumeContentType)
-      this.appFormObj.userImageContentType = file.type
-      console.log("2"+this.appFormObj.userImageContentType)
       reader.readAsBinaryString(file);
       
     }
