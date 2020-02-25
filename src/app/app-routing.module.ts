@@ -18,6 +18,9 @@ const routes: Routes = [
   },
   {
     path:"test",component:TestComponent
+  },
+  {
+    path:"editapplicantform/:id",component:MainScreenComponent
   }
 ];
 

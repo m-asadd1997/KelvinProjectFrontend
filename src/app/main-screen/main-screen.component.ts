@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApplicantForm } from './ApplicantForm';
 import { ApplicantServiceService } from '../Services/applicant-service.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-main-screen',
@@ -11,6 +12,7 @@ export class MainScreenComponent implements OnInit {
 
   resume:File;
   photo:File;
+  id : any;
 
   foods: any[] = [
     {value: 'steak-0', viewValue: 'Steak'},
@@ -23,10 +25,23 @@ export class MainScreenComponent implements OnInit {
   ];
 
   appFormObj: ApplicantForm = new ApplicantForm();
-  constructor(private applicantService: ApplicantServiceService) { }
+  constructor(private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log("Hello")
+
+    this.id = this.activateRoute.snapshot.params['id'];
+    console.log(this.id)
+
+    if(this.id)
+      this.getApplicantById(this.id)
+      
+  }
+
+  getApplicantById(id){
+    this.applicantService.getApplicantById(id).subscribe(d=>{
+      this.appFormObj = d;
+    })
+
   }
 
   openFile(){
@@ -40,11 +55,21 @@ export class MainScreenComponent implements OnInit {
   saveApplicantForm(){
     console.log("this is form data "+this.appFormObj)
     console.log(this.resume)
-    // this.photo
-    //this.createBase64String(this.appFormObj);
-    this.applicantService.saveApplicantForm(this.appFormObj).subscribe(d=>{
-      console.log(d);
-    })
+
+    if(this.id){
+      this.applicantService.updateApplicantForm(this.id,this.appFormObj).subscribe(d=>{
+        console.log(d);
+      })
+    }else{
+      this.applicantService.saveApplicantForm(this.appFormObj).subscribe(d=>{
+        console.log(d);
+      })
+
+    }
+    
+    // this.createBase64String(this.appFormObj);
+   
+
   }
 
 
