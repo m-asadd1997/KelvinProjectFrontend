@@ -198,8 +198,39 @@
           <div class="col-md-6"><mat-checkbox name="securityClearance" [(ngModel)]="appFormObj.securityClearance">Security Clearence</mat-checkbox></div>
           <!-- <div class="col-md-6"><mat-checkbox>Emergency Contact</mat-checkbox></div> -->
         </div>
+        <div class="row">
+          <div class="col-md-2">
         <button (click)="saveApplicantForm()" mat-raised-button color="warn">Save</button>
+      </div>
+      <div class="col-md-2">
+        <ng-template #content let-modal>
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="dateOfBirth">Reciever Email</label>
+                <div class="input-group">
 
+  <input class="form-control" placeholder="Enter reciever email" name="email" [(ngModel)]="responseEmail">
+                 
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="sendEmail()">Save</button>
+          </div>
+        </ng-template>
+        <div *ngIf="responseStatus">
+        <button mat-raised-button color="primary" (click)="open(content)">Email</button>
+      </div>
+      </div>
+      </div>
       </form>
     </mat-card>
     </div>
