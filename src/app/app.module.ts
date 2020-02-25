@@ -19,6 +19,8 @@ import {MatCardModule} from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import { TestComponent } from './test/test.component';
+import { ViewportfolioComponent } from './viewportfolio/viewportfolio.component';
+import {MatDividerModule} from '@angular/material/divider';
 
 
 // import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +30,8 @@ import { TestComponent } from './test/test.component';
     AppComponent,
     LoginPageComponent,
     MainScreenComponent,
-    TestComponent
+    TestComponent,
+    ViewportfolioComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +48,8 @@ import { TestComponent } from './test/test.component';
     FormsModule,
     HttpClientModule,
     MatCardModule,
-    MatTableModule
+    MatTableModule,
+    MatDividerModule
     
     // NgbModule,
     // MatGridListModule
