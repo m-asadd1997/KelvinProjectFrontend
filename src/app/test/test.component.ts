@@ -52,6 +52,11 @@ export class TestComponent implements OnInit {
   }
 
   deleteApplicantById(id:any){
-    
+    this.tableData = [];
+    this.applicantService.deleteApplicantById(id).subscribe(d=>{
+      this.getDataInTable();
+    })
+
+
   }
 }
