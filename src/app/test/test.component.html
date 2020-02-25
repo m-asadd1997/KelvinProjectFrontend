@@ -1,11 +1,12 @@
 <div class="container">
     <div>
+        <mat-card>
       <!-- <div *ngFor="let data of array">
         <p>{{data}}</p>
         </div> -->
 
 <table class="table table-striped">
-    <caption>List of users</caption>
+    
     <thead>
       <tr>
         <th>id</th>
@@ -29,8 +30,8 @@
           <td>{{d.email}}</td>
           <td>
             <button mat-raised-button  color="primary">View</button> 
-            <button mat-raised-button style="background-color: rgb(84, 106, 231);">Edit</button>          
-            <button mat-raised-button color="warn">Delete</button>          
+            <button mat-raised-button (click)="updateApplicantForm(d.id)" style="background-color: rgb(84, 106, 231);">Edit</button>          
+            <button mat-raised-button (click)="deleteApplicantById(d.id)" color="warn">Delete</button>          
 
             
         </td>
@@ -43,6 +44,7 @@
       
     </tbody>
   </table>
+</mat-card>
 </div>
 
 </div>

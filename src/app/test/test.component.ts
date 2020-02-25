@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApplicantServiceService } from '../Services/applicant-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-test',
@@ -10,7 +11,7 @@ export class TestComponent implements OnInit {
 
   tableData = [];
   
-  constructor(private applicantService:ApplicantServiceService) { }
+  constructor(private applicantService:ApplicantServiceService, private router: Router) { }
 
   ngOnInit(): void {
     this.getDataInTable()
@@ -44,5 +45,13 @@ export class TestComponent implements OnInit {
     //  })
      console.log(this.tableData)
     })
+  }
+
+  updateApplicantForm(id:any){
+   this.router.navigate(['editapplicantform/'+id])
+  }
+
+  deleteApplicantById(id:any){
+    
   }
 }
