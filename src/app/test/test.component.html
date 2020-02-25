@@ -1,0 +1,51 @@
+<div class="container">
+    <div>
+      <!-- <div *ngFor="let data of array">
+        <p>{{data}}</p>
+        </div> -->
+
+<table class="table table-striped">
+    <caption>List of users</caption>
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Gender</th>
+        <th>Email</th>
+        <th>Action</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      
+        <tr *ngFor="let d of tableData">
+          <td >{{d.id}}</td>
+          <td>{{d.name}}</td>
+          <td>{{d.phone}}</td>
+          <td>{{d.address}}</td>
+          <td>{{d.gender}}</td>
+          <td>{{d.email}}</td>
+          <td>
+            <button mat-raised-button  color="primary">View</button> 
+            <button mat-raised-button style="background-color: rgb(84, 106, 231);">Edit</button>          
+            <button mat-raised-button color="warn">Delete</button>          
+
+            
+        </td>
+         
+  
+          
+        </tr>
+     
+      
+      
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+
+
