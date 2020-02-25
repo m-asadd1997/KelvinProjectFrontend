@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'app-login-page',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class LoginPageComponent implements OnInit {
   errorVisible=false;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private service:LoginService) { }
 
   ngOnInit(): void {
     localStorage.clear();
@@ -25,6 +26,37 @@ export class LoginPageComponent implements OnInit {
      }
      
       
+    }
+
+    check(uname: string, p: string) {
+      // var output = this.service.checkUserandPass(uname, p);
+      this.service.checkUserandPass(uname, p).subscribe(
+        res => {
+          if(res.status=="200"){
+            console.log('toker', res);
+  
+            sessionStorage.setItem('token', res.result.token);
+            sessionStorage.setItem('email',res.result.email);
+            sessionStorage.setItem('username', res.result.username);
+            sessionStorage.setItem('userType', res.result.userType);
+            
+            setTimeout(() => {
+              this.router.navigate(['/applicantForm']);
+            }, 1000);
+          }
+          else{
+           
+  
+            this.router.navigate(['']);
+          }
+       
+        },
+        error => {
+          
+        }
+      );
+  
+      // if(output == true){
     }
 
 }
