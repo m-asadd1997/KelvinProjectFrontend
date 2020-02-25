@@ -15,18 +15,22 @@ export class ApplicantServiceService {
   }
 
   getApplicantFields():Observable<any>{
-    return this.http.get("http://localhost:3000/applicant-form")
+    return this.http.get(this.url+"api/applicant-form")
   }
 
   updateApplicantForm(id:any,appObj:any):Observable<any>{
-    return this.http.post("http://localhost:3000/applicant-form/"+id,appObj)
+    return this.http.put(this.url+"api/applicant-form/"+id,appObj)
   }
 
   getApplicantById(id):Observable<any>{
-    return this.http.get("http://localhost:3000/applicant-form/"+id)
+    return this.http.get(this.url+"api/applicant-form/"+id)
   }
 
   deleteApplicantById(id):Observable<any>{
-    return this.http.delete("http://localhost:3000/applicant-form/"+id);
+    return this.http.delete(this.url+"api/applicant-form/"+id);
+  }
+
+  sendEmail(id,email):Observable<any>{
+    return this.http.post(this.url+"api/applicant-form/"+id+"/"+email,null)
   }
 }

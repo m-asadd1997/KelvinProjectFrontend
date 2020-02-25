@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ApplicantForm } from './ApplicantForm';
 import { ApplicantServiceService } from '../Services/applicant-service.service';
 import { ActivatedRoute } from '@angular/router';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-main-screen',
@@ -13,6 +14,9 @@ export class MainScreenComponent implements OnInit {
   resume:File;
   photo:File;
   id : any;
+  responseStatus = false;
+  responseId :any;
+  responseEmail : any;
 
   foods: any[] = [
     {value: 'steak-0', viewValue: 'Steak'},
@@ -25,7 +29,8 @@ export class MainScreenComponent implements OnInit {
   ];
 
   appFormObj: ApplicantForm = new ApplicantForm();
-  constructor(private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute) { }
+  closeResult: string;
+  constructor(private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute,private modalService: NgbModal) { }
 
   ngOnInit(): void {
 
@@ -36,13 +41,35 @@ export class MainScreenComponent implements OnInit {
       this.getApplicantById(this.id)
       
   }
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
 
   getApplicantById(id){
     this.applicantService.getApplicantById(id).subscribe(d=>{
-      this.appFormObj = d;
+      this.appFormObj = d.result;
     })
 
   }
+
+  sendEmail(){
+    this.applicantService.sendEmail(this.responseId,this.responseEmail).subscribe();
+  }
+
 
   openFile(){
     console.log('hell')
@@ -53,15 +80,33 @@ export class MainScreenComponent implements OnInit {
   }
 
   saveApplicantForm(){
+    this.responseId = null;
     console.log("this is form data "+this.appFormObj)
     console.log(this.resume)
 
     if(this.id){
       this.applicantService.updateApplicantForm(this.id,this.appFormObj).subscribe(d=>{
+        if(d['status']===200){
+          this.responseId = d['result'].id;
+
+          this.responseStatus = true;
+        }
+        else{
+          this.responseStatus = false;
+        }
         console.log(d);
       })
     }else{
       this.applicantService.saveApplicantForm(this.appFormObj).subscribe(d=>{
+        if(d['status']===200){
+          this.responseId = d['result'].id;
+
+          console.log(this.responseId)
+          this.responseStatus = true;
+        }
+        else{
+          this.responseStatus = false;
+        }
         console.log(d);
       })
 
@@ -72,7 +117,7 @@ export class MainScreenComponent implements OnInit {
 
   }
 
-
+ 
 
 
 _handleReaderLoaded(readerEvt) {

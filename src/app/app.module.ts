@@ -20,16 +20,18 @@ import { CommonModule } from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import { TestComponent } from './test/test.component';
 import { NoopInterceptor } from './request.intercept';
+import {MatDialogModule} from '@angular/material/dialog';
+import { EmailPopupComponent } from './email-popup/email-popup.component';
 
-
-// import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 // import {MatGridListModule} from '@angular/material/grid-list';
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
     MainScreenComponent,
-    TestComponent
+    TestComponent,
+    EmailPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -46,9 +48,12 @@ import { NoopInterceptor } from './request.intercept';
     FormsModule,
     HttpClientModule,
     MatCardModule,
-    MatTableModule
+    MatTableModule,
+    MatDialogModule,
     
-    // NgbModule,
+
+    
+    NgbModule,
     // MatGridListModule
   ],
   providers: [
