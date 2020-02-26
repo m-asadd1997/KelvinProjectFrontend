@@ -6,15 +6,27 @@
 <br>
 <div class="container">
   <div class="row">
-    <div class="col-md-2">
-      <mat-divider [vertical]="true"></mat-divider>
+    <div class="col-md-3" style="border-right: thin solid rgb(207, 209, 211); padding: 0% !important; height: 500px;">
+      <div class="row">
+        <h3 style="margin-left: 20%;">Create New Profile</h3>
+
+      </div>
+      <div class="row" (click)="goToapplicantTable()" style="cursor: pointer;">
+        <h3 style="margin-left: 20%;">Browse Profiles</h3>
+      </div>
+
+      <div class="row" style="margin-top: 110%; margin-left: 10%;">
+        <img src="assets/logo.jpeg" height="80" width="150">
+      </div>
     </div>
     <div class="col-md-3">
       <img style="margin-left: 60%;" [src]="appFormObj.userImage!=null? 'data:image/jpeg;base64,'+appFormObj.userImage : 'assets/user.png' " alt="Avatar" class="avatar">
-        <input type="file"  (change)="onImageChange($event)" style="margin-left: 40%;" >
+      <label style="margin-left: 63%; font-size: 0.9em;margin-top: 5%;cursor: pointer;">Select Picture
+        <input type="file"  (change)="onImageChange($event)" style="margin-left: 40%; " >
+        </label>
     </div>
       
-    <div class="col-md-7">
+    <div class="col-md-6">
       <mat-card>
       <form class="example-form">
         <h3>Personal Information</h3>
@@ -230,7 +242,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" (click)="sendEmail()">Save</button>
+            <button type="button" class="btn btn-outline-dark" (click)="sendEmail();sendProducttoCheckout(appFormObj)">Save</button>
           </div>
         </ng-template>
         <div *ngIf="responseStatus">
