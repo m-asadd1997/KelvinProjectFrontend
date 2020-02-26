@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApplicantServiceService } from '../Services/applicant-service.service';
 import { Router } from '@angular/router';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-test',
@@ -11,10 +13,16 @@ export class TestComponent implements OnInit {
 
   tableData = [];
   
+  displayedColumns: string[] = ['id', 'name', 'phone', 'address','email','action'];
+  dataSource = new MatTableDataSource<any>(this.tableData);
+
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  
   constructor(private applicantService:ApplicantServiceService, private router: Router) { }
 
   ngOnInit(): void {
     this.getDataInTable()
+    this.dataSource.paginator = this.paginator;
   }
 
   getDataInTable(){
