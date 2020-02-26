@@ -125,10 +125,18 @@ _handleReaderLoaded(readerEvt) {
           let base64textString= btoa(binaryString);
           //console.log(btoa(binaryString));
           this.appFormObj.resume = base64textString;
-          console.log(this.appFormObj.resume)
+          //console.log(this.appFormObj.resume)
           
   }
   
+  _handleReaderImageLoaded(readerEvt) {
+    var binaryString = readerEvt.target.result;
+           let base64textString= btoa(binaryString);
+           //console.log(btoa(binaryString));
+           this.appFormObj.userImage = base64textString;
+          // console.log(this.appFormObj.resume)
+           
+   }
 
 
   onFileChange(event) {
@@ -137,7 +145,19 @@ _handleReaderLoaded(readerEvt) {
       let file = event.target.files[0];
       reader.onload =this._handleReaderLoaded.bind(this);
       this.appFormObj.resumeContentType = file.type
-      console.log("1"+this.appFormObj.resumeContentType)
+     // console.log("1"+this.appFormObj.resumeContentType)
+      reader.readAsBinaryString(file);
+      
+    }
+  }
+
+  onImageChange(event) {
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.onload =this._handleReaderImageLoaded.bind(this);
+      this.appFormObj.userImage = file.type
+      //console.log("1"+this.appFormObj.resumeContentType)
       reader.readAsBinaryString(file);
       
     }

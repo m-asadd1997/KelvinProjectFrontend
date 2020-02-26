@@ -19,9 +19,12 @@ import {MatCardModule} from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import { TestComponent } from './test/test.component';
+
 import { NoopInterceptor } from './request.intercept';
 import {MatDialogModule} from '@angular/material/dialog';
 import { EmailPopupComponent } from './email-popup/email-popup.component';
+import { ViewportfolioComponent } from './viewportfolio/viewportfolio.component';
+import {MatDividerModule} from '@angular/material/divider';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 // import {MatGridListModule} from '@angular/material/grid-list';
@@ -32,6 +35,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     MainScreenComponent,
     TestComponent,
     EmailPopupComponent,
+    ViewportfolioComponent
   ],
   imports: [
     CommonModule,
@@ -52,6 +56,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     MatDialogModule,
     
 
+    MatDividerModule,
     
     NgbModule,
     // MatGridListModule
