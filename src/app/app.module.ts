@@ -22,8 +22,12 @@ import { TestComponent } from './test/test.component';
 import { NoopInterceptor } from './request.intercept';
 import {MatDialogModule} from '@angular/material/dialog';
 import { EmailPopupComponent } from './email-popup/email-popup.component';
-
+import {MatIconModule} from '@angular/material/icon';
+import {MatDividerModule} from '@angular/material/divider';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {MatPaginatorModule} from '@angular/material/paginator';
+// import {MatPaginator} from '@angular/material/paginator';
+// import {MatTableDataSource} from '@angular/material/table';
 // import {MatGridListModule} from '@angular/material/grid-list';
 @NgModule({
   declarations: [
@@ -49,11 +53,11 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     MatCardModule,
     MatTableModule,
-    MatDialogModule,
-    
-
-    
+    MatDialogModule,  
     NgbModule,
+    MatIconModule,
+    MatPaginatorModule,
+    MatDividerModule
     // MatGridListModule
   ],
   providers: [
