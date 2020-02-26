@@ -1,5 +1,5 @@
 <nav class="navbar navbar-light bg-light" style="background-color: white !important;border-top-color: black;border-top-style:solid; border-top-width: thin; border-bottom-style: ridge; box-shadow:0px 5px 5px rgb(179, 179, 179);">
-  <a class="navbar-brand mb-0 h3" href="#" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-weight: 600;">
+  <a class="navbar-brand mb-0 h3" href="#" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-weight: 800;">
    PROFILES</a>
 </nav>
 
@@ -15,14 +15,14 @@
         <h3 style="margin-left: 20%;">Browse Profiles</h3>
       </div>
 
-      <div class="row" style="margin-top: 110%; margin-left: 10%;">
+      <div class="row" style="margin-top: 200%; margin-left: 10%;">
         <img src="assets/logo.jpeg" height="80" width="150">
       </div>
     </div>
     <div class="col-md-3">
       <img style="margin-left: 60%;" [src]="appFormObj.userImage!=null? 'data:image/jpeg;base64,'+appFormObj.userImage : 'assets/user.png' " alt="Avatar" class="avatar">
       <label style="margin-left: 63%; font-size: 0.9em;margin-top: 5%;cursor: pointer;">Select Picture
-        <input type="file"  (change)="onImageChange($event)" style="margin-left: 40%; " >
+        <input type="file" id="imgFile" (change)="onImageChange($event)" style="margin-left: 40%; " >
         </label>
     </div>
       
@@ -128,42 +128,6 @@
           </div>
         </div>
 
-        <!-- <div class="row">
-          <div class="col-md-4">
-            <mat-form-field class="example-full-width">
-              <mat-label>City</mat-label>
-              <input
-                style="width: 100%;"
-                matInput
-                placeholder="Ex. Pizza"
-                value="Sushi"
-              />
-            </mat-form-field>
-          </div>
-          <div class="col-md-4">
-            <mat-form-field class="example-full-width">
-              <mat-label>Province</mat-label>
-              <input
-                style="width: 100%;"
-                matInput
-                placeholder="Ex. Pizza"
-                value="Sushi"
-              />
-            </mat-form-field>
-          </div>
-          <div class="col-md-4">
-            <mat-form-field class="example-full-width">
-              <mat-label>Country</mat-label>
-              <input
-                style="width: 100%;"
-                matInput
-                placeholder="Ex. Pizza"
-                value="Sushi"
-              />
-            </mat-form-field>
-          </div>
-
-        </div> -->
         <h3>Documentation</h3>
         <div class="row">
           <div class="col-md-12">
@@ -183,7 +147,7 @@
         <div class="row">
           <div class="col-md-6">
             <mat-form-field>
-              <mat-label style="font-size: 1em;">Citizenship</mat-label>
+              <mat-label style="font-size: 1em;">Canadian Citizenship</mat-label>
               <mat-select name="citizenship" [(ngModel)]="appFormObj.citizenship">
                 <mat-option *ngFor="let food of foods" [value]="food.value">
                   {{food.viewValue}}
@@ -217,10 +181,15 @@
           <div class="col-md-6"><mat-checkbox name="securityClearance" [(ngModel)]="appFormObj.securityClearance">Security Clearence</mat-checkbox></div>
           <!-- <div class="col-md-6"><mat-checkbox>Emergency Contact</mat-checkbox></div> -->
         </div>
+        <div *ngIf ="showloading" class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
         <div class="row">
           <div class="col-md-2">
-        <button (click)="saveApplicantForm()" mat-raised-button color="warn">Save</button>
+        <button (click)="saveApplicantForm();" mat-raised-button color="warn">Save</button>
+       
       </div>
+      
       <div class="col-md-2">
         <ng-template #content let-modal>
           <div class="modal-header">
@@ -242,7 +211,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" (click)="sendEmail();sendProducttoCheckout(appFormObj)">Save</button>
+            <button type="button" class="btn btn-outline-dark"  (click)="sendEmail();modal.dismiss('Cross click')">Send Email</button>
           </div>
         </ng-template>
         <div *ngIf="responseStatus">
@@ -251,7 +220,11 @@
       </div>
       </div>
       </form>
+      
     </mat-card>
+    
+    
     </div>
   </div>
 </div>
+

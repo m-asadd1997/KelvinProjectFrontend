@@ -23,7 +23,7 @@ const routes: Routes = [
   {
     path:"editapplicantform/:id",component:MainScreenComponent},
 
-    {path:"viewportfolio",component:ViewportfolioComponent
+    {path:"viewportfolio/:id",component:ViewportfolioComponent
   }
 ];
 

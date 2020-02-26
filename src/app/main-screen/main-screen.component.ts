@@ -3,6 +3,7 @@ import { ApplicantForm } from './ApplicantForm';
 import { ApplicantServiceService } from '../Services/applicant-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-main-screen',
@@ -17,6 +18,7 @@ export class MainScreenComponent implements OnInit {
   responseStatus = false;
   responseId :any;
   responseEmail : any;
+  recieverEmailFlag = true;
 
   foods: any[] = [
     {value: 'yes', viewValue: 'Yes'},
@@ -29,7 +31,10 @@ export class MainScreenComponent implements OnInit {
 
   appFormObj: ApplicantForm = new ApplicantForm();
   closeResult: string;
-  constructor(private router:Router,private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute,private modalService: NgbModal) { }
+  durationInSeconds: number;
+  success = "Success";
+  showloading = false;
+  constructor(private _snackBar: MatSnackBar,private router:Router,private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute,private modalService: NgbModal) { }
 
   ngOnInit(): void {
 
@@ -65,8 +70,29 @@ export class MainScreenComponent implements OnInit {
 
   }
 
+  isemailPresent(){
+    if(this.appFormObj.recevierEmail){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
   sendEmail(){
-    this.applicantService.sendEmail(this.responseId,this.responseEmail).subscribe();
+    
+    debugger;
+    if(this.responseEmail!= null){
+      this.showloading = true;
+      this.applicantService.sendEmail(this.responseId,this.responseEmail).subscribe(res=>{
+        
+        this._snackBar.open(res.message,"X",{duration: 3000});
+        this.showloading = false;
+      });      
+    }
+    else{      
+      this._snackBar.open("Please Provide Email","X",{duration: 3000});
+    }
+    
   }
 
 
@@ -89,9 +115,13 @@ export class MainScreenComponent implements OnInit {
           this.responseId = d['result'].id;
 
           this.responseStatus = true;
+          //this.openSnackBar("done")
+          this._snackBar.open("Success","X",{duration: 3000});
+
         }
         else{
           this.responseStatus = false;
+          this._snackBar.open("Error","X",{duration: 3000});
         }
         console.log(d);
       })
@@ -102,9 +132,12 @@ export class MainScreenComponent implements OnInit {
 
           console.log(this.responseId)
           this.responseStatus = true;
+          this._snackBar.open("Success","X",{duration: 3000});
+          
         }
         else{
           this.responseStatus = false;
+          this._snackBar.open("Error","X",{duration: 3000});
         }
         console.log(d);
       })
@@ -166,11 +199,6 @@ _handleReaderLoaded(readerEvt) {
     this.router.navigate(['test'])
   }
 
-  sendProducttoCheckout(prod :Object){
-    console.log(prod)
-    this.applicantService.sendMessage(prod);
-    
-  }
 }
 
 

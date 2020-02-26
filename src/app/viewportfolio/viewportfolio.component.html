@@ -3,7 +3,7 @@
    VIEW PROFILE</a>
 </nav>
 <br>
-<div class = "container">
+<div *ngIf="applicantObj" class = "container">
 <mat-card>
   <mat-card-header style="background-color: #d7edf8">
     <div class="container">
@@ -12,7 +12,7 @@
           
           <img
             style="margin-left: 2% ;height: 140px;"
-            src="assets/user.png"
+            [src]="applicantObj.userImage!=null? 'data:image/jpeg;base64,'+applicantObj.userImage : 'assets/user.png' "
             alt="Avatar"
             class="avatar"
           /></div>
@@ -23,12 +23,12 @@
           <span
             class="font-weight-bold col-6"
             style="font-size: x-large;"
-            >John Doe</span
+            >{{applicantObj.name}}</span
           ></div>
 
           <!-- <br /> -->
           <div class="row">
-          <span style="margin-top: 15px;margin-left: 15px;" >example@gig.com</span></div>
+          <span style="margin-top: 15px;margin-left: 15px;" >{{applicantObj.email}}</span></div>
         </div>
       </div>
     </div>
@@ -51,7 +51,7 @@
       </div>
       <div class="row">
         <div class="col-4">
-          <span class="text-muted" style="font-size: small">Visa in order</span>
+          <span class="text-muted" style="font-size: small">{{applicantObj.visaDetails}}</span>
         </div>
       </div>
       <br>
@@ -62,59 +62,59 @@
       </div>
       <div class="row">
         <div class="col-4">
-          <span class="text-muted" style="font-size: small">Yes</span>
+          <span class="text-muted" style="font-size: small">{{applicantObj.citizenship}}</span>
         </div>
       </div>
       <br>
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-6">
           <span class = "font-weight-bold my-4" style="font-size: small">Completed Documentation</span>
         </div>
       </div>
       <div class="row">
         <div class="col-4">
-          <span class="text-muted" style="font-size: small">Yes</span>
+          <span class="text-muted" style="font-size: small">{{applicantObj.}}</span>
         </div>
 
-      </div>
+      </div> -->
       <br>
       
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-8">
           <span class = "font-weight-bold text-uppercase text-muted" style="font-size: small;">Completed Documentation</span>
         </div>
-      </div>
+      </div> -->
       <br>
       
 
       <div class="row">
         <div class="col-6">
-          <span class = "font-weight-normal  text-muted" style="font-size: small;">Employee Application</span>
+          <span class = "font-weight-normal  text-muted" style="font-size: small;">Employee Application : {{applicantObj.employeeApplication}}</span>
         </div>
         <div class="col-4">
-            <span class = "font-weight-normal  text-muted" style="font-size: small;">Medical Clearance</span>
+            <span class = "font-weight-normal  text-muted" style="font-size: small;">Medical Clearance : {{applicantObj.medicalClearance}}</span>
           </div>
       </div>
       <div class="row">
         <div class="col-6">
-          <span class = "font-weight-normal  text-muted" style="font-size: small;">Employee Orientation</span>
+          <span class = "font-weight-normal  text-muted" style="font-size: small;">Employee Orientation : {{applicantObj.employeeOrientation}}</span>
         </div>
         <div class="col-4">
-            <span class = "font-weight-normal  text-muted" style="font-size: small;">Employee Wellness</span>
+            <span class = "font-weight-normal  text-muted" style="font-size: small;">Employee Wellness : {{applicantObj.employeeWellness}}</span>
           </div>
       </div>
       <div class="row">
         <div class="col-6">
-          <span class = "font-weight-normal  text-muted" style="font-size: small;">Employee identification</span>
+          <span class = "font-weight-normal  text-muted" style="font-size: small;">Employee identification : {{applicantObj.employeeIdentification}}</span>
         </div>
         <div class="col-4">
-            <span class = "font-weight-normal  text-muted" style="font-size: small;">Employee Contact</span>
+            <span class = "font-weight-normal  text-muted" style="font-size: small;">Employee Contact : {{applicantObj.emergencyContact}}</span>
           </div>
       </div>
       <div class="row">
         <div class="col-4">
-          <span class = "font-weight-normal text-muted" style="font-size: small;">Security Clearance</span>
+          <span class = "font-weight-normal text-muted" style="font-size: small;">Security Clearance : {{applicantObj.securityClearance}}</span>
         </div>
       </div>
 
@@ -134,7 +134,7 @@
           <span class = "font-weight-bold" style="font-size: small;">Phone</span>
         </div>
         <div class="col-6">
-            <span class = "font-weight-normal  text-muted" style="font-size: small;">1-403-888-8888</span>
+            <span class = "font-weight-normal  text-muted" style="font-size: small;">{{applicantObj.phone}}</span>
           </div>
       </div>
       <br>
@@ -144,7 +144,7 @@
           <span class = "font-weight-bold" style="font-size: small;">Address</span>
         </div>
         <div class="col-6">
-            <span class = "font-weight-normal  text-muted" style="font-size: small;">378 th Ave City Calgary Alberta Canada</span>
+            <span class = "font-weight-normal  text-muted" style="font-size: small;">{{applicantObj.address}}</span>
           </div>
       </div>
       <br>
@@ -160,7 +160,7 @@
           <span class = "font-weight-bold" style="font-size: small;">Birthday</span>
         </div>
         <div class="col-6">
-            <span class = "font-weight-normal  text-muted" style="font-size: small;">January 01 1980</span>
+            <span class = "font-weight-normal  text-muted" style="font-size: small;">{{applicantObj.dateOfBirth}}</span>
           </div>
       </div>
       <br>
@@ -169,7 +169,7 @@
           <span class = "font-weight-bold" style="font-size: small;">Gender</span>
         </div>
         <div class="col-6">
-            <span class = "font-weight-normal  text-muted" style="font-size: small;">Male</span>
+            <span class = "font-weight-normal  text-muted" style="font-size: small;">{{applicantObj.gender}}</span>
           </div>
       </div>
       <br>
