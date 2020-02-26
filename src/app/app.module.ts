@@ -19,11 +19,17 @@ import {MatCardModule} from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import { TestComponent } from './test/test.component';
+
 import { NoopInterceptor } from './request.intercept';
 import {MatDialogModule} from '@angular/material/dialog';
 import { EmailPopupComponent } from './email-popup/email-popup.component';
+
 import {MatIconModule} from '@angular/material/icon';
+
+import { ViewportfolioComponent } from './viewportfolio/viewportfolio.component';
 import {MatDividerModule} from '@angular/material/divider';
+
+
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {MatPaginatorModule} from '@angular/material/paginator';
 // import {MatPaginator} from '@angular/material/paginator';
@@ -36,6 +42,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MainScreenComponent,
     TestComponent,
     EmailPopupComponent,
+    ViewportfolioComponent
   ],
   imports: [
     CommonModule,
@@ -53,7 +60,14 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     HttpClientModule,
     MatCardModule,
     MatTableModule,
+
     MatDialogModule,  
+
+    
+
+    MatDividerModule,
+    
+
     NgbModule,
     MatIconModule,
     MatPaginatorModule,

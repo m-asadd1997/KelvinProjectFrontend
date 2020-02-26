@@ -10,8 +10,8 @@
       <mat-divider [vertical]="true"></mat-divider>
     </div>
     <div class="col-md-3">
-      <img style="margin-left: 60%;" src="assets/user.png" alt="Avatar" class="avatar">
-        <input type="file"  (change)="onFileChange($event)" style="margin-left: 40%;" >
+      <img style="margin-left: 60%;" [src]="appFormObj.userImage!=null? 'data:image/jpeg;base64,'+appFormObj.userImage : 'assets/user.png' " alt="Avatar" class="avatar">
+        <input type="file"  (change)="onImageChange($event)" style="margin-left: 40%;" >
     </div>
       
     <div class="col-md-7">
