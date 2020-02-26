@@ -3,6 +3,7 @@ import { ApplicantServiceService } from '../Services/applicant-service.service';
 import { Router } from '@angular/router';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-test',
@@ -11,25 +12,35 @@ import {MatTableDataSource} from '@angular/material/table';
 })
 export class TestComponent implements OnInit {
 
-  tableData = [];
-  
+  tableData:any[] = [];
+  showLoader = true;
   displayedColumns: string[] = ['id', 'name', 'phone', 'address','email','action'];
-  dataSource = new MatTableDataSource<any>(this.tableData);
-
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  
+  //dataSource = new MatTableDataSource<any>(this.tableData);
+  dataSource: MatTableDataSource<any>;
+  //@ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild('scheduledOrdersPaginator') paginator: MatPaginator;
   constructor(private applicantService:ApplicantServiceService, private router: Router) { }
 
   ngOnInit(): void {
     this.getDataInTable()
-    this.dataSource.paginator = this.paginator;
+    
+    
   }
 
   getDataInTable(){
     //this.tableData = [];
+    this.showLoader = true;
     this.applicantService.getApplicantFields().subscribe(data=>{
       console.log(data)
       this.tableData = data; 
+      if(this.tableData)
+      {
+        this.showLoader = false;
+      }
+      else{
+        this.showLoader = false
+      }
+      
     //  data.map(d=>{
     //    this.tableData.push({
     //      id:d.id,
@@ -51,6 +62,8 @@ export class TestComponent implements OnInit {
     //      emergencyContact:d.emergencyContact
     //    })
     //  })
+    this.dataSource = new MatTableDataSource(this.tableData);
+    this.dataSource.paginator = this.paginator;
      console.log(this.tableData)
     })
   }
@@ -61,10 +74,24 @@ export class TestComponent implements OnInit {
 
   deleteApplicantById(id:any){
     this.tableData = [];
+    
     this.applicantService.deleteApplicantById(id).subscribe(d=>{
+
       this.getDataInTable();
     })
 
 
   }
+
+  viewPortfolio(id:any){
+    this.router.navigate(['viewportfolio/'+id])
+  }
+
+
+  // pageEvent(event){
+  //   console.log(event)
+  //   let data = this.tableData.slice(0,event);
+  //   this.dataSource = new MatTableDataSource(data);
+    
+  // }
 }

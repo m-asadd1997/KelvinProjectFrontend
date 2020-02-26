@@ -32,6 +32,10 @@ import {MatDividerModule} from '@angular/material/divider';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { NotificationsComponent } from './notifications/notifications.component';
+
+
 // import {MatPaginator} from '@angular/material/paginator';
 // import {MatTableDataSource} from '@angular/material/table';
 // import {MatGridListModule} from '@angular/material/grid-list';
@@ -42,7 +46,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MainScreenComponent,
     TestComponent,
     EmailPopupComponent,
-    ViewportfolioComponent
+    ViewportfolioComponent,
+    NotificationsComponent
   ],
   imports: [
     CommonModule,
@@ -71,7 +76,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     NgbModule,
     MatIconModule,
     MatPaginatorModule,
-    MatDividerModule
+    MatDividerModule,
+    MatSnackBarModule
     // MatGridListModule
   ],
   providers: [

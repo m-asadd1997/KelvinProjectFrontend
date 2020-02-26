@@ -22,9 +22,9 @@
     border-radius: 50%;
   }
 
-  input[type="file"] {
+  #imgFile{
     display: none;
-}
+} 
 
 label{
   padding: 5px;
