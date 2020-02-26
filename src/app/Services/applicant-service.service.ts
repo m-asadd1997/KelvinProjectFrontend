@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -8,10 +8,16 @@ import { environment } from '../../environments/environment';
 })
 export class ApplicantServiceService {
 
+  private productSource = new Subject<Object>();
+  productMessage$ = this.productSource.asObservable();
   constructor(private http: HttpClient) { }
    url:any = environment.baseUrl;
   saveApplicantForm(appObj: any):Observable<any>{
     return this.http.post(this.url+"api/applicant-form",appObj)
+  }
+
+  sendMessage(obj: Object){
+    this.productSource.next(obj);
   }
 
   getApplicantFields():Observable<any>{

@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ApplicantForm } from './ApplicantForm';
 import { ApplicantServiceService } from '../Services/applicant-service.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -19,9 +19,8 @@ export class MainScreenComponent implements OnInit {
   responseEmail : any;
 
   foods: any[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'}
+    {value: 'yes', viewValue: 'Yes'},
+    {value: 'no', viewValue: 'No'}
   ];
   Gender: any[] = [
     {value: 'male', viewValue: 'male'},
@@ -30,7 +29,7 @@ export class MainScreenComponent implements OnInit {
 
   appFormObj: ApplicantForm = new ApplicantForm();
   closeResult: string;
-  constructor(private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute,private modalService: NgbModal) { }
+  constructor(private router:Router,private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute,private modalService: NgbModal) { }
 
   ngOnInit(): void {
 
@@ -163,6 +162,15 @@ _handleReaderLoaded(readerEvt) {
     }
   }
 
+  goToapplicantTable(){
+    this.router.navigate(['test'])
+  }
+
+  sendProducttoCheckout(prod :Object){
+    console.log(prod)
+    this.applicantService.sendMessage(prod);
+    
+  }
 }
 
 

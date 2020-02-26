@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApplicantServiceService } from '../Services/applicant-service.service';
 
 @Component({
   selector: 'app-viewportfolio',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewportfolioComponent implements OnInit {
 
-  constructor() { }
+  appObj : any;
+  constructor(private applicantService: ApplicantServiceService) { }
 
   ngOnInit(): void {
+    this.applicantService.productMessage$.subscribe(d=>{
+       this.appObj = d
+       console.log("app obj ",this.appObj)
+    })
   }
 
 }
