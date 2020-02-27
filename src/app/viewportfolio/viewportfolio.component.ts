@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApplicantServiceService } from '../Services/applicant-service.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-viewportfolio',
@@ -11,7 +11,7 @@ export class ViewportfolioComponent implements OnInit {
   id: any;
   applicantObj;
   
-  constructor(private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute) { }
+  constructor(private router: Router,private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.id = this.activateRoute.snapshot.params['id'];
@@ -26,4 +26,11 @@ export class ViewportfolioComponent implements OnInit {
     })
   }
 
+  goToapplicantTable(){
+    this.router.navigate(['test'])
+  }
+
+  goToNewProfiles(){
+    this.router.navigate(['applicantForm'])
+  }
 }

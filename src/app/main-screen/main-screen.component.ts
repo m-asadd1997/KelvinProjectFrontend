@@ -199,6 +199,10 @@ _handleReaderLoaded(readerEvt) {
     this.router.navigate(['test'])
   }
 
+  goToNewProfiles(){
+    this.router.navigate(['applicantForm'])
+  }
+
 }
 
 

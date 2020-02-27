@@ -94,4 +94,12 @@ export class TestComponent implements OnInit {
   //   this.dataSource = new MatTableDataSource(data);
     
   // }
+
+  goToapplicantTable(){
+    this.router.navigate(['test'])
+  }
+
+  goToNewProfiles(){
+    this.router.navigate(['applicantForm'])
+  }
 }
