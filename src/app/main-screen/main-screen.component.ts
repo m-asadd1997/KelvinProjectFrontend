@@ -203,6 +203,11 @@ _handleReaderLoaded(readerEvt) {
     this.router.navigate(['applicantForm'])
   }
 
+  logout(){
+   
+     this.router.navigate(['']);
+  }
+
 }
 
 
