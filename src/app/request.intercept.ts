@@ -3,10 +3,12 @@ import {
   HttpEvent,
   HttpInterceptor,
   HttpHandler,
-  HttpRequest
+  HttpRequest,
+  HttpResponse
 } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Router } from '@angular/router';
+import { map, catchError } from 'rxjs/operators';
 // import { nextContext } from "@angular/core/src/render3";
 
 @Injectable()
@@ -19,13 +21,27 @@ export class NoopInterceptor implements HttpInterceptor {
 
       if(sessionStorage.length>0){
         const changedReq = req.clone({headers: req.headers.set('Authorization', sessionStorage.getItem('token'))});
-        return next.handle(changedReq);
+        return next.handle(changedReq).pipe(
+          map((event: HttpEvent<any>) => {
+              if (event instanceof HttpResponse) {
+                  console.log('event--->>>', event);
+              }
+              return event;
+          }));
       }else{
         // // sessionStorage.clear();
         // this.router.navigate(['']);
          const changedReq = req.clone({headers: req.headers.set('Content-Type', 'application/json')});
         // const changedReq = req.clone();
-         return next.handle(changedReq);
+         //return next.handle(changedReq);
+
+         return next.handle(changedReq).pipe(
+          map((event: HttpEvent<any>) => {
+              if (event instanceof HttpResponse) {
+                  console.log('event--->>>', event);
+              }
+              return event;
+          }));
       }
 
 
