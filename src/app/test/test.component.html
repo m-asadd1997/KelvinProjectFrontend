@@ -1,69 +1,19 @@
-<!-- <div class="container">
-    <div>
-        <mat-card>
-     
-
-<table class="table table-striped">
-    
-    <thead>
-      <tr>
-        <th>id</th>
-        <th>Name</th>
-        <th>Phone</th>
-        <th>Address</th>
-        <th>Gender</th>
-        <th>Email</th>
-        <th>Action</th>
-        
-      </tr>
-    </thead>
-    <tbody>
-      
-        <tr *ngFor="let d of tableData" style="overflow: auto;">
-          <td >{{d.id}}</td>
-          <td>{{d.name}}</td>
-          <td>{{d.phone}}</td>
-          <td>{{d.address}}</td>
-          <td>{{d.gender}}</td>
-          <td>{{d.email}}</td>
-          <td>
-            <button mat-icon-button  color="primary"><mat-icon>visibility</mat-icon></button> 
-            <button mat-icon-button (click)="updateApplicantForm(d.id)"><mat-icon>edit</mat-icon></button>          
-            <button mat-icon-button (click)="deleteApplicantById(d.id)" color="warn"><mat-icon>delete</mat-icon></button>          
-
-            
-        </td>
-         
-  
-          
-        </tr>
-     
-      
-      
-    </tbody>
-  </table>
-</mat-card>
-</div>
-
-</div>
-
-
- -->
- 
  <nav class="navbar navbar-light bg-light" style="background-color: white !important;border-top-color: black;border-top-style:solid; border-top-width: thin; border-bottom-style: ridge; box-shadow:0px 5px 5px rgb(179, 179, 179);">
   <a class="navbar-brand mb-0 h3" href="#" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-weight: 600;">
    PROFILES</a>
   
    
    
-   <div style="margin-left: 60%;">
+   <div style="margin-right: 55%;">
     <button mat-stroked-button (click)="goToNewProfiles()">
       Create New Profile
     </button>
     &nbsp;
     <button mat-stroked-button (click)="goToapplicantTable()">Browse Profiles</button>
    </div>
-   
+   <div style="margin-right: 3%;" style="cursor: pointer;" (click)="logout()">
+    <img src="assets/icons8-logout-rounded-left-24.png" alt="">
+  </div>
    <div class="row" style="float: right; margin-right: 1%;">
     
     

@@ -102,4 +102,9 @@ export class TestComponent implements OnInit {
   goToNewProfiles(){
     this.router.navigate(['applicantForm'])
   }
+  logout(){
+   
+    this.router.navigate(['']);
+ }
+
 }
