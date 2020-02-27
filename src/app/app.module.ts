@@ -34,7 +34,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { NotificationsComponent } from './notifications/notifications.component';
-
+import { ExportAsModule } from 'ngx-export-as';
 
 // import {MatPaginator} from '@angular/material/paginator';
 // import {MatTableDataSource} from '@angular/material/table';
@@ -77,7 +77,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
     MatIconModule,
     MatPaginatorModule,
     MatDividerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ExportAsModule
     // MatGridListModule
   ],
   providers: [
