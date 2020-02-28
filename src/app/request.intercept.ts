@@ -4,9 +4,10 @@ import {
   HttpInterceptor,
   HttpHandler,
   HttpRequest,
-  HttpResponse
+  HttpResponse,
+  HttpErrorResponse
 } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable,throwError,of  } from "rxjs";
 import { Router } from '@angular/router';
 import { map, catchError } from 'rxjs/operators';
 // import { nextContext } from "@angular/core/src/render3";
@@ -14,7 +15,7 @@ import { map, catchError } from 'rxjs/operators';
 @Injectable()
 export class NoopInterceptor implements HttpInterceptor {
 
-  // constructor(private router:Router){}
+  constructor(private router:Router){}
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
       console.log("hello interceptor");
 
@@ -27,7 +28,17 @@ export class NoopInterceptor implements HttpInterceptor {
                   console.log('event--->>>', event);
               }
               return event;
-          }));
+          }),catchError((error: any) => {
+            if(error instanceof HttpErrorResponse) {
+                    console.log(error);
+                    if(error.status == 401)
+                    this.router.navigate(['']);
+            }
+            return of(error);
+        })
+        
+        
+        );
       }else{
         // // sessionStorage.clear();
         // this.router.navigate(['']);

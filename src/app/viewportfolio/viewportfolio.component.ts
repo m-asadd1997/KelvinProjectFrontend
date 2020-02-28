@@ -51,11 +51,42 @@ export class ViewportfolioComponent implements OnInit {
    
   }
 
+  downloadFile(){
+    debugger;
+    const extension =this.getMIMEtype(this.applicantObj['resumeContentType']);
+    const source =  "data:"+extension +";base64,"+this.applicantObj["resume"];//new Blob([this.applicantObj["resume"]], { type: this.getMIMEtype(this.applicantObj['resumeContentType']) });
+    const downloadLink = document.createElement("a");
+    const fileName = "download."+extension;
+
+    downloadLink.href = source;
+    downloadLink.download = fileName;
+    downloadLink.click();
+    //const url= window.URL.createObjectURL(blob);
+    //window.open(url);
+  }
+
   logout(){
    
     this.router.navigate(['']);
  }
-
+ getMIMEtype(extn){
+  let ext=extn.toLowerCase();
+  let MIMETypes={
+     'text/plain':'txt',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document':'docx',
+     'application/msword':'doc' ,
+     'application/pdf':'pdf',
+     'image/jpeg':'jpg' ,
+     'image/bmp':'bmp' ,
+     'image/png':'png' ,
+     'application/vnd.ms-excel':'xls' ,
+     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'xlsx',
+     'application/rtf':'rtf' ,
+     'application/vnd.ms-powerpoint':'ppt' ,
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation':'pptx'
+  }
+  return MIMETypes[ext];
+}
  
  
 
