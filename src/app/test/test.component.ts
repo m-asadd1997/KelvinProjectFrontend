@@ -103,7 +103,11 @@ export class TestComponent implements OnInit {
     this.router.navigate(['applicantForm'])
   }
   logout(){
-   
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('userType');
+
     this.router.navigate(['']);
  }
 

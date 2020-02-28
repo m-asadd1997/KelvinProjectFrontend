@@ -70,7 +70,11 @@ export class ViewportfolioComponent implements OnInit {
   }
 
   logout(){
-   
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('userType');
+
     this.router.navigate(['']);
  }
  getMIMEtype(extn){

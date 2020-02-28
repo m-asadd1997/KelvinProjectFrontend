@@ -204,7 +204,10 @@ _handleReaderLoaded(readerEvt) {
   }
 
   logout(){
-   
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('userType');
      this.router.navigate(['']);
   }
 
