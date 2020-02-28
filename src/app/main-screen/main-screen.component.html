@@ -38,6 +38,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-3">
+      
       <img
         style="margin-left: 60%;"
         [src]="
@@ -62,7 +63,7 @@
 
     <div class="col-md-6">
       <mat-card>
-        <form class="example-form">
+        <form class="example-form" #checkForm>
           <h3>Personal Information</h3>
           <div class="row">
             <div class="col-md-12">
@@ -74,6 +75,7 @@
                   placeholder="Name"
                   [(ngModel)]="appFormObj.name"
                   name="name"
+                  required
                 />
               </mat-form-field>
             </div>
@@ -89,6 +91,7 @@
                   placeholder="Email"
                   name="email"
                   [(ngModel)]="appFormObj.email"
+                  required
                 />
               </mat-form-field>
             </div>
@@ -104,6 +107,7 @@
                   placeholder="phone number"
                   name="phone"
                   [(ngModel)]="appFormObj.phone"
+                  required
                 />
               </mat-form-field>
             </div>
@@ -112,7 +116,7 @@
             <div class="col-md-12">
               <mat-form-field>
                 <mat-label style="font-size: 1em;">Gender</mat-label>
-                <mat-select name="gender" [(ngModel)]="appFormObj.gender">
+                <mat-select name="gender" [(ngModel)]="appFormObj.gender" required>
                   <mat-option *ngFor="let gen of Gender" [value]="gen.value">
                     {{ gen.viewValue }}
                   </mat-option>
@@ -130,6 +134,7 @@
                   [(ngModel)]="appFormObj.dateOfBirth"
                   matInput
                   [matDatepicker]="picker"
+                  required
                 />
                 <mat-datepicker-toggle
                   matSuffix
@@ -147,6 +152,7 @@
                   placeholder="Place of Birth"
                   name="placeOfBirth"
                   [(ngModel)]="appFormObj.placeOfBirth"
+                  required
                 />
               </mat-form-field>
             </div>
@@ -162,6 +168,7 @@
                   placeholder="Address"
                   name="address"
                   [(ngModel)]="appFormObj.address"
+                  required
                 />
               </mat-form-field>
             </div>
@@ -178,6 +185,7 @@
                   placeholder="Visa Details"
                   name="visaDetails"
                   [(ngModel)]="appFormObj.visaDetails"
+                  required
                 />
               </mat-form-field>
             </div>
@@ -192,6 +200,7 @@
                 <mat-select
                   name="citizenship"
                   [(ngModel)]="appFormObj.citizenship"
+                  required
                 >
                   <mat-option *ngFor="let food of foods" [value]="food.value">
                     {{ food.viewValue }}
@@ -200,9 +209,9 @@
               </mat-form-field>
             </div>
             <div class="col-md-6">
-              <input type="file" (change)="onFileChange($event)" />
+              <input type="file" (change)="onFileChange($event)" required/>
               <div *ngIf="id">
-               <a href="src\app\viewportfolio\viewportfolio.component.html" download="test.pdf">
+               <a style="cursor: pointer;color: crimson;"  (click)="downloadFile()">
                  download resume
                </a>
   
@@ -278,6 +287,7 @@
           <div class="row">
             <div class="col-md-2">
               <button
+              [disabled]="formValidation()"
                 (click)="saveApplicantForm()"
                 mat-raised-button
                 color="warn"

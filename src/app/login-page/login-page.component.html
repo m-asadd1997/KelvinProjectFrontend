@@ -117,13 +117,21 @@
                                     <!-- Error Message -->
                                 </div>
                                 <div class="col-lg-6 login-btm login-button">
-                                    <button type="submit" mat-stroked-button style="margin-left: 150%;color: grey;" (click)="check(email.value,password.value)">LOGIN</button>
+									<button type="submit" mat-stroked-button style="margin-left: 150%;color: grey;" (click)="check(email.value,password.value)">LOGIN</button>
+									<div *ngIf="showLoading" style="margin-left: 40%;">		
+										<div class="spinner-grow text-dark" role="status">
+										  <span class="sr-only">Loading...</span>
+										</div>
+									  </div>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-2"></div>
+				<div class="col-lg-3 col-md-2"></div>
+			
             </div>
-        </div>
+		</div>
+		<br>
+		
 
