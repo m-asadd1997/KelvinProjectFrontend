@@ -9,6 +9,7 @@ import { LoginService } from './login.service';
 })
 export class LoginPageComponent implements OnInit {
   errorVisible=false;
+  showLoading = false;
   constructor(private router: Router, private service:LoginService) { }
 
   ngOnInit(): void {
@@ -29,10 +30,12 @@ export class LoginPageComponent implements OnInit {
     }
 
     check(uname: string, p: string) {
+      this.showLoading = true;
       // var output = this.service.checkUserandPass(uname, p);
       this.service.checkUserandPass(uname, p).subscribe(
         res => {
           if(res.status=="200"){
+            this.showLoading = false;
             console.log('toker', res);
   
             sessionStorage.setItem('token', res.result.token);
@@ -46,13 +49,13 @@ export class LoginPageComponent implements OnInit {
           }
           else{
            
-  
+            
             this.router.navigate(['']);
           }
        
         },
         error => {
-          
+          this.showLoading = true;
         }
       );
   

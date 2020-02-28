@@ -16,6 +16,8 @@ export class ViewportfolioComponent implements OnInit {
     type: 'pdf', // the type you want to download
     elementId: 'myTableElementId', // the id of html/table element
   }
+
+  
   
   constructor(private exportAsService: ExportAsService,private router: Router,private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute) { }
 
@@ -23,6 +25,8 @@ export class ViewportfolioComponent implements OnInit {
     this.id = this.activateRoute.snapshot.params['id'];
     if(this.id)
     this.getPortfolioDataById(this.id)
+    this.checkToken();
+    console.log("token para hai",sessionStorage.getItem('token'))
   }
 
   getPortfolioDataById(id: any){
@@ -89,6 +93,13 @@ export class ViewportfolioComponent implements OnInit {
 }
  
  
-
+checkToken(){
+  if(sessionStorage.getItem('token')){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 
 }
