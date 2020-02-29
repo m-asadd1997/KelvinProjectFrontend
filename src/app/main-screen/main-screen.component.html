@@ -7,7 +7,7 @@
     href="#"
     style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-weight: 800;"
   >
-    NEW PROFILE</a
+    PROFILES</a
   >
   <div style="margin-right: 50%;">
     <button
@@ -63,7 +63,7 @@
 
     <div class="col-md-6">
       <mat-card>
-        <form class="example-form" #checkForm>
+        <form class="example-form"   #myForm="ngForm">
           <h3>Personal Information</h3>
           <div class="row">
             <div class="col-md-12">
@@ -288,7 +288,7 @@
             <div class="col-md-2">
               <button
               [disabled]="formValidation()"
-                (click)="saveApplicantForm()"
+              (click)="saveApplicantForm(myForm)"
                 mat-raised-button
                 color="warn"
               >
@@ -299,9 +299,9 @@
             <div class="col-md-2">
               <ng-template #content let-modal>
                 <div class="modal-header">
-                  <h4 class="modal-title" id="modal-basic-title">
+                  <!-- <h4 class="modal-title" id="modal-basic-title">
                     Profile update
-                  </h4>
+                  </h4> -->
                   <button
                     type="button"
                     class="close"
@@ -314,11 +314,11 @@
                 <div class="modal-body">
                   <form>
                     <div class="form-group">
-                      <label for="dateOfBirth">Reciever Email</label>
+                      <!-- <label for="dateOfBirth">Reciever Email</label> -->
                       <div class="input-group">
                         <input
                           class="form-control"
-                          placeholder="Enter reciever email"
+                          placeholder="Enter email address"
                           name="email"
                           [(ngModel)]="responseEmail"
                         />

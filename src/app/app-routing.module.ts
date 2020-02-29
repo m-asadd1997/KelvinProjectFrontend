@@ -18,7 +18,7 @@ const routes: Routes = [
     path:'applicanttable',component:ApplicantTableComponent
   },
   {
-    path:"test",component:TestComponent
+    path:"browseProfiles",component:TestComponent
   },
   {
     path:"editapplicantform/:id",component:MainScreenComponent},

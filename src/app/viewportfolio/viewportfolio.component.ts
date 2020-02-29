@@ -12,10 +12,12 @@ import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
 export class ViewportfolioComponent implements OnInit {
   id: any;
   applicantObj;
+  showLoading = false;
   exportAsConfig: ExportAsConfig = {
     type: 'pdf', // the type you want to download
     elementId: 'myTableElementId', // the id of html/table element
   }
+  
 
   
   
@@ -30,14 +32,23 @@ export class ViewportfolioComponent implements OnInit {
   }
 
   getPortfolioDataById(id: any){
-
+    this.showLoading = true;
     this.applicantService.getPortfolioDataById(id).subscribe(d=>{
        this.applicantObj = (d.result)
+       if(this.applicantObj){
+         this.showLoading = false;
+       }
+       else{
+         this.showLoading = true;
+       }
+       console.log(this.applicantObj)
+      
     })
+    
   }
 
   goToapplicantTable(){
-    this.router.navigate(['test'])
+    this.router.navigate(['browseProfiles'])
   }
 
   goToNewProfiles(){
@@ -56,7 +67,7 @@ export class ViewportfolioComponent implements OnInit {
   }
 
   downloadFile(){
-    debugger;
+    
     const extension =this.getMIMEtype(this.applicantObj['resumeContentType']);
     const source =  "data:"+extension +";base64,"+this.applicantObj["resume"];//new Blob([this.applicantObj["resume"]], { type: this.getMIMEtype(this.applicantObj['resumeContentType']) });
     const downloadLink = document.createElement("a");
