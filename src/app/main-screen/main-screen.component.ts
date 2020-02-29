@@ -4,6 +4,7 @@ import { ApplicantServiceService } from '../Services/applicant-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-main-screen',
@@ -41,8 +42,10 @@ export class MainScreenComponent implements OnInit {
     this.id = this.activateRoute.snapshot.params['id'];
     console.log(this.id)
 
-    if(this.id)
+    if(this.id){
+    this.responseStatus = true;
       this.getApplicantById(this.id)
+    }
       
   }
   open(content) {
@@ -79,19 +82,37 @@ export class MainScreenComponent implements OnInit {
     }
   }
   sendEmail(){
+    if(this.id){
+      if(this.responseEmail!= null){
+        this.showloading = true;
+        this.applicantService.sendEmail(this.id,this.responseEmail).subscribe(res=>{
+          
+          this._snackBar.open(res.message,"X",{duration: 3000});
+          this.showloading = false;
+         
+        });      
+      }
+      else{      
+        this._snackBar.open("Please Provide Email","X",{duration: 3000});
+      }
+    }else{
+      if(this.responseEmail!= null){
+        this.showloading = true;
+        this.applicantService.sendEmail(this.responseId,this.responseEmail).subscribe(res=>{
+          
+          this._snackBar.open(res.message,"X",{duration: 3000});
+          this.showloading = false;
+          if(!this.id){
+            this.responseStatus = false;
+          }
+        });      
+      }
+      else{      
+        this._snackBar.open("Please Provide Email","X",{duration: 3000});
+      }
+    }
     
-    debugger;
-    if(this.responseEmail!= null){
-      this.showloading = true;
-      this.applicantService.sendEmail(this.responseId,this.responseEmail).subscribe(res=>{
-        
-        this._snackBar.open(res.message,"X",{duration: 3000});
-        this.showloading = false;
-      });      
-    }
-    else{      
-      this._snackBar.open("Please Provide Email","X",{duration: 3000});
-    }
+   
     
   }
 
@@ -104,14 +125,17 @@ export class MainScreenComponent implements OnInit {
     console.log(e)
   }
 
-  saveApplicantForm(){
+  saveApplicantForm(myForm : NgForm){
     this.responseId = null;
     console.log("this is form data "+this.appFormObj)
     console.log(this.resume)
 
     if(this.id){
+      
       this.applicantService.updateApplicantForm(this.id,this.appFormObj).subscribe(d=>{
         if(d['status']===200){
+          
+
           this.responseId = d['result'].id;
 
           this.responseStatus = true;
@@ -128,6 +152,7 @@ export class MainScreenComponent implements OnInit {
     }else{
       this.applicantService.saveApplicantForm(this.appFormObj).subscribe(d=>{
         if(d['status']===200){
+          myForm.reset();
           this.responseId = d['result'].id;
 
           console.log(this.responseId)
@@ -196,7 +221,7 @@ _handleReaderLoaded(readerEvt) {
   }
 
   goToapplicantTable(){
-    this.router.navigate(['test'])
+    this.router.navigate(['browseProfiles'])
   }
 
   goToNewProfiles(){
