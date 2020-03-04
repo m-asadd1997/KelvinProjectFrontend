@@ -22,17 +22,20 @@ export class TestComponent implements OnInit {
   constructor(private applicantService:ApplicantServiceService, private router: Router) { }
 
   ngOnInit(): void {
-    this.getDataInTable()
     
+    this.getDataInTable()
+   
     
   }
 
   getDataInTable(){
+  
     //this.tableData = [];
     this.showLoader = true;
     this.applicantService.getApplicantFields().subscribe(data=>{
       console.log(data)
       this.tableData = data; 
+      
       if(this.tableData)
       {
         this.showLoader = false;
@@ -41,31 +44,16 @@ export class TestComponent implements OnInit {
         this.showLoader = false
       }
       
-    //  data.map(d=>{
-    //    this.tableData.push({
-    //      id:d.id,
-    //      name:d.name,
-    //      email:d.email,
-    //      address:d.address,
-    //      phone:d.phone,
-    //      gender:d.gender,
-    //      placeOfBirth:d.placeOfBirth,
-    //      dateOfBirth:d.dateOfBirth,
-    //      visaDetails:d.visaDetails,
-    //      citizenship:d.citizenship,
-    //      employeeApplication:d.employeeApplication,
-    //      employeeOrientation:d.employeeOrientation,
-    //      employeeIdentification:d.employeeIdentification,
-    //      securityClearance:d.securityClearance,
-    //      medicalClearance:d.medicalClearance,
-    //      employeeWellness:d.employeeWellness,
-    //      emergencyContact:d.emergencyContact
-    //    })
-    //  })
+    
+   
     this.dataSource = new MatTableDataSource(this.tableData);
     this.dataSource.paginator = this.paginator;
-     console.log(this.tableData)
+    this.dataSource.filterPredicate = function(data, filter: string): boolean {
+      return data.name.toLowerCase().includes(filter);
+    };
+     console.log("ye hai data source",this.dataSource)
     })
+   
   }
 
   updateApplicantForm(id:any){
@@ -111,4 +99,13 @@ export class TestComponent implements OnInit {
     this.router.navigate(['']);
  }
 
+ applyFilter(filterValue: string) {
+ 
+  filterValue = filterValue.trim(); // Remove whitespace
+  filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+ 
+  this.dataSource.filter = filterValue;
+
+ 
+ }
 }

@@ -287,15 +287,18 @@
           <div class="row">
             <div class="col-md-2">
               <button
-              [disabled]="formValidation()"
+              [disabled]="formValidation() || disableSaveButton"
               (click)="saveApplicantForm(myForm)"
                 mat-raised-button
                 color="warn"
               >
                 Save
               </button>
+              
             </div>
-
+            <div *ngIf="showSaveLoading" class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
             <div class="col-md-2">
               <ng-template #content let-modal>
                 <div class="modal-header">
@@ -334,7 +337,9 @@
                   >
                     Send Email
                   </button>
+                 
                 </div>
+               
               </ng-template>
               <div *ngIf="responseStatus">
                 <button

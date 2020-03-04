@@ -35,6 +35,8 @@ export class MainScreenComponent implements OnInit {
   durationInSeconds: number;
   success = "Success";
   showloading = false;
+  showSaveLoading = false;
+  disableSaveButton: boolean = false;
   constructor(private _snackBar: MatSnackBar,private router:Router,private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute,private modalService: NgbModal) { }
 
   ngOnInit(): void {
@@ -126,18 +128,21 @@ export class MainScreenComponent implements OnInit {
   }
 
   saveApplicantForm(myForm : NgForm){
+    this.disableSaveButton = true;
+    // this.responseStatus = true;
+    // this.disableSaveButton = true;
     this.responseId = null;
     console.log("this is form data "+this.appFormObj)
     console.log(this.resume)
 
     if(this.id){
-      
+      this.showSaveLoading = true;
       this.applicantService.updateApplicantForm(this.id,this.appFormObj).subscribe(d=>{
         if(d['status']===200){
           
-
+          this.showSaveLoading = false;
           this.responseId = d['result'].id;
-
+          
           this.responseStatus = true;
           //this.openSnackBar("done")
           this._snackBar.open("Success","X",{duration: 3000});
@@ -150,11 +155,12 @@ export class MainScreenComponent implements OnInit {
         console.log(d);
       })
     }else{
+      this.showSaveLoading = true;
       this.applicantService.saveApplicantForm(this.appFormObj).subscribe(d=>{
         if(d['status']===200){
-          myForm.reset();
+          this.showSaveLoading = false;
           this.responseId = d['result'].id;
-
+          myForm.reset();
           console.log(this.responseId)
           this.responseStatus = true;
           this._snackBar.open("Success","X",{duration: 3000});
