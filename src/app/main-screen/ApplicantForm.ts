@@ -5,7 +5,9 @@ export interface ApplicantForm {
     name?: string;
     email?: string;
     recevierEmail?: string;
-    phone?: string;
+    homeNumber?: string;
+    cellNumber?: string;
+    visaWorkOptions?:string;
     address?: string;
     gender?: string;
     placeOfBirth?: string;
@@ -14,13 +16,25 @@ export interface ApplicantForm {
     citizenship?: string;
     resumeContentType?: string;
     resume?: any;
-    employeeApplication?: boolean;
+    employeeApplication?: String;
     employeeOrientation?: boolean;
-    employeeIdentification?: boolean;
+    employeeIdentification?: String;
     securityClearance?: boolean;
-    medicalClearance?: boolean;
+    medicalClearance?: String;
     employeeWellness?: boolean;
     emergencyContact?: boolean;
+    emergencyContactInfo?: boolean;
+    socialMediaLinks?: String;
+    kpiCertified?:boolean;
+    emergencyAddress?:String;
+    emergencyPhone?:String;
+    emergencyName?:String;
+    profileId?:String;
+    zipCode?:String;
+    country?:String;
+    province?:String;
+    city?:String;
+    canadianCitizenshipDetails?:String;
   }
   
   export class ApplicantForm implements ApplicantForm {
@@ -31,7 +45,6 @@ export interface ApplicantForm {
       public name?: string,
       public email?: string,
       public recevierEmail?: string,
-      public phone?: string,
       public address?: string,
       public gender?: string,
       public placeOfBirth?: string,
@@ -40,19 +53,19 @@ export interface ApplicantForm {
       public citizenship?: string,
       public resumeContentType?: string,
       public resume?: any,
-      public employeeApplication?: boolean,
+      // public employeeApplication?: boolean,
       public employeeOrientation?: boolean,
-      public employeeIdentification?: boolean,
+      public employeeIdentification?: String,
       public securityClearance?: boolean,
-      public medicalClearance?: boolean,
+      // public medicalClearance?: boolean,
       public employeeWellness?: boolean,
       public emergencyContact?: boolean
     ) {
-      this.employeeApplication = this.employeeApplication || false;
+      // this.employeeApplication = this.employeeApplication || false;
       this.employeeOrientation = this.employeeOrientation || false;
-      this.employeeIdentification = this.employeeIdentification || false;
+      // this.employeeIdentification = this.employeeIdentification || false;
       this.securityClearance = this.securityClearance || false;
-      this.medicalClearance = this.medicalClearance || false;
+      // this.medicalClearance = this.medicalClearance || false;
       this.employeeWellness = this.employeeWellness || false;
       this.emergencyContact = this.emergencyContact || false;
     }

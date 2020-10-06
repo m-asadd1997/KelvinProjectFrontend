@@ -14,7 +14,7 @@ export class TestComponent implements OnInit {
 
   tableData:any[] = [];
   showLoader = true;
-  displayedColumns: string[] = ['id', 'name', 'phone', 'address','email','action'];
+  displayedColumns: string[] = ['id', 'profileId','name', 'phone', 'address','email','action'];
   //dataSource = new MatTableDataSource<any>(this.tableData);
   dataSource: MatTableDataSource<any>;
   //@ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -34,7 +34,9 @@ export class TestComponent implements OnInit {
     this.showLoader = true;
     this.applicantService.getApplicantFields().subscribe(data=>{
       console.log(data)
-      this.tableData = data; 
+    
+      this.tableData = data;
+
       
       if(this.tableData)
       {

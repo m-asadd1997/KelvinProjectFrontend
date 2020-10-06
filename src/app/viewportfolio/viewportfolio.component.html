@@ -1,5 +1,5 @@
 <nav class="navbar navbar-light bg-light" style="background-color: white !important;border-top-color: black;border-top-style:solid; border-top-width: thin; border-bottom-style: ridge; box-shadow:0px 5px 5px rgb(179, 179, 179);">
-  <a class="navbar-brand mb-0 h3" href="#" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-weight: 600;">
+  <a class="navbar-brand mb-0 h3"  style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-weight: 600;">
    PROFILES</a>
    <div style="margin-right: 50%;" *ngIf="checkToken()">
     <button mat-stroked-button (click)="goToNewProfiles()">
@@ -16,15 +16,15 @@
   </div>
 </nav>
 <br>
-<div *ngIf="showLoading" style="margin-left: 47%; margin-top: 10%;">
+<!-- <div *ngIf="showLoading" style="margin-left: 47%; margin-top: 10%;">
   <div class="spinner-grow text-info" role="status">
     <span class="sr-only">Loading...</span>
   </div>
   <div class="spinner-grow text-secondary" role="status">
     <span class="sr-only">Loading...</span>
   </div>
-</div>
-<div *ngIf="applicantObj" class = "container" >
+</div> -->
+<div  class = "container" >
 <mat-card>
   <mat-card-header style="background-color: #d7edf8">
     <div class="container" id="myTableElementId">
@@ -50,6 +50,9 @@
           <!-- <br /> -->
           <div class="row">
           <span style="margin-top: 15px;margin-left: 15px;" >{{applicantObj.email}}</span></div>
+        </div>
+        <div class="row" style="margin-top: 0%;margin-left: 25%;" *ngIf="applicantObj.kpiCertified">
+          <img src="assets/KPI-Stamp-small.png" height="100px" width="120px">
         </div>
       </div>
     </div>
@@ -86,29 +89,9 @@
           <span class="text-muted" style="font-size: small">{{applicantObj.citizenship}}</span>
         </div>
       </div>
+      <br>     
       <br>
-      <!-- <div class="row">
-        <div class="col-6">
-          <span class = "font-weight-bold my-4" style="font-size: small">Completed Documentation</span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-4">
-          <span class="text-muted" style="font-size: small">{{applicantObj.}}</span>
-        </div>
-
-      </div> -->
       <br>
-      
-
-      <!-- <div class="row">
-        <div class="col-8">
-          <span class = "font-weight-bold text-uppercase text-muted" style="font-size: small;">Completed Documentation</span>
-        </div>
-      </div> -->
-      <br>
-      
-
       <div class="row">
         <div class="col-6" *ngIf="applicantObj.employeeApplication">
           <span class = "font-weight-normal  text-muted" style="font-size: small;">Employee Application</span>
@@ -139,10 +122,16 @@
         </div>
       </div>
 
-
+      <br>
+      <div  class="row" style="margin-left: 1%;">
+        <div *ngFor="let media of socialLinks" style="margin-left: 1%;">
+          <a *ngIf="media.socialSite !== ''" [href]="media.socialLink">
+        <img [src]="'assets/'+media.socialSite+'.png'"  width="30px" height="30px">
+      </a>
+      </div>
+      </div>
     </div>
     <mat-divider [vertical]="true"></mat-divider>
-
 <div class="col-4">
     <div class="row">
         <div class="col-8">
