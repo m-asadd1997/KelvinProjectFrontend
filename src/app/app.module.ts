@@ -13,7 +13,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatBadgeModule} from '@angular/material/badge';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {MatCardModule} from '@angular/material/card';
 import { CommonModule } from '@angular/common';
@@ -35,10 +35,13 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { ExportAsModule } from 'ngx-export-as';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer'
+import { NgxUiLoaderModule,NgxUiLoaderHttpModule  } from 'ngx-ui-loader';
 
-// import {MatPaginator} from '@angular/material/paginator';
-// import {MatTableDataSource} from '@angular/material/table';
-// import {MatGridListModule} from '@angular/material/grid-list';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,21 +68,22 @@ import { ExportAsModule } from 'ngx-export-as';
     HttpClientModule,
     MatCardModule,
     MatTableModule,
-
     MatDialogModule,  
-
-    
-
     MatDividerModule,
-    
-
     NgbModule,
     MatIconModule,
     MatPaginatorModule,
     MatDividerModule,
     MatSnackBarModule,
-    ExportAsModule
-    // MatGridListModule
+    ExportAsModule,
+    MatRadioModule,
+    ReactiveFormsModule,
+    MatSlideToggleModule,
+    NgxDocViewerModule,
+    NgxExtendedPdfViewerModule,
+    NgxUiLoaderHttpModule.forRoot({ showForeground: true }),
+    NgxUiLoaderModule
+    
   ],
   providers: [
     MatDatepickerModule,

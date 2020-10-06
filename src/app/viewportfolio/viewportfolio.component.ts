@@ -17,7 +17,10 @@ export class ViewportfolioComponent implements OnInit {
     type: 'pdf', // the type you want to download
     elementId: 'myTableElementId', // the id of html/table element
   }
-  
+  socialLinks: any[] = [{
+    socialLink : "",
+    socialSite: ""
+  }];
 
   
   
@@ -35,6 +38,10 @@ export class ViewportfolioComponent implements OnInit {
     this.showLoading = true;
     this.applicantService.getPortfolioDataById(id).subscribe(d=>{
        this.applicantObj = (d.result)
+       this.socialLinks = JSON.parse(d.result.socialMediaLinks)
+      
+       console.log(this.socialLinks);
+       
        if(this.applicantObj){
          this.showLoading = false;
        }
