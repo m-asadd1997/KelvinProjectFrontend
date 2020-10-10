@@ -34,7 +34,12 @@ export interface ApplicantForm {
     country?:String;
     province?:String;
     city?:String;
+    zipCodeForEmergency?:String;
+    countryForEmergency?:String;
+    provinceForEmergency?:String;
+    cityForEmergency?:String;
     canadianCitizenshipDetails?:String;
+    visaExpiryDate?:String;
   }
   
   export class ApplicantForm implements ApplicantForm {
@@ -69,5 +74,10 @@ export interface ApplicantForm {
       this.employeeWellness = this.employeeWellness || false;
       this.emergencyContact = this.emergencyContact || false;
     }
+  }
+
+  export class ViewLink{
+    email?:String;
+    token?:String;
   }
   

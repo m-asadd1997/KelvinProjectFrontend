@@ -287,7 +287,7 @@
                   style="width: 100%"
                   matInput
                   placeholder="Emergency Name"
-                  name="emergencyContactInfo"
+                  name="emergencyName"
                   [(ngModel)]="appFormObj.emergencyName"
                 />
               </mat-form-field>
@@ -303,7 +303,7 @@
                   style="width: 100%"
                   matInput
                   placeholder="Emergency Phone number"
-                  name="emergencyContactInfo"
+                  name="emergencyPhone"
                   [(ngModel)]="appFormObj.emergencyPhone"
                 />
               </mat-form-field>
@@ -313,18 +313,80 @@
           <div class="row">
             <div class="col-md-12">
               <mat-form-field class="example-full-width">
-                <mat-label>Address </mat-label>
+                <mat-label>Street Address </mat-label>
                 <input
                   style="width: 100%"
                   matInput
                   placeholder="Emergency Address"
-                  name="emergencyContactInfo"
+                  name="emergencyAddress"
                   [(ngModel)]="appFormObj.emergencyAddress"
                 />
               </mat-form-field>
             </div>
           </div>
-
+          <div class="row">
+            <div class="col-md-6">
+  
+              <mat-form-field style="width:100%">
+                <mat-label>Choose a Country</mat-label>
+                <mat-select (selectionChange)="countryChangeForEmergency($event)"
+                  required
+                  [(ngModel)]="countryObjForEmergency"
+                  name="countryForEmergency">
+                  <mat-option *ngFor="let c of countriesForEmergency"
+                    [value]="c">
+                    {{c.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+  
+            </div>
+            <div class="col-md-6">
+              <mat-form-field style="width:100%">
+                <mat-label>Choose a Province/State</mat-label>
+                <mat-select (selectionChange)="provinceChangeForEmergency($event)"
+                  required
+                  [(ngModel)]="provinceObjForEmergency"
+                  name="provinceForEmergency">
+                  <mat-option *ngFor="let p of provincesForEmergency"
+                    [value]="p">
+                    {{p.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field style="width:100%">
+                <mat-label>Choose a City</mat-label>
+                <mat-select required
+                [(ngModel)]="cityObjForEmergency"
+                  name="cityForEmergency"
+                  (selectionChange)="cityChangeForEmergency($event)">
+                  <mat-option *ngFor="let c of citiesForEmergency"
+                    [value]="c">
+                    {{c.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+              <div class="col-md-6">
+                <mat-form-field class="example-full-width">
+                  <mat-label>ZIP code </mat-label>
+                  <input
+                    required
+                    style="width: 100%"
+                    matInput
+                    placeholder="ZIP code"
+                    name="zipCodeForEmergency"
+                    [(ngModel)]="appFormObj.zipCodeForEmergency"
+                  />
+                </mat-form-field>
+             
+            </div>
+          </div>
          
 
         
@@ -364,6 +426,22 @@
               &nbsp; &nbsp;
               <mat-radio-button value="Other"> Other</mat-radio-button>
             </mat-radio-group>
+            <mat-form-field style="margin-left: 3%;">
+              <mat-label style="font-size: 1em">Visa Expiry Date</mat-label>
+              <input
+                style="width: 100%"
+                name="visaExpiryDate"
+                [(ngModel)]="appFormObj.visaExpiryDate"
+                matInput
+                [matDatepicker]="picker"
+                required
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
           </div>
           <br />
           <div class="row">
@@ -410,18 +488,11 @@
             </div>
           </div>
           <div class="row">
-            <!-- <div class="col-md-6">
-              <mat-checkbox
-                name="employeeApplication"
-                [(ngModel)]="appFormObj.employeeApplication"
-                >Employee Application</mat-checkbox
-              >
-            </div> -->
             <div class="col-md-6">
               <mat-checkbox
-                name="emergencyContact"
-                [(ngModel)]="appFormObj.emergencyContact"
-                >Emergency Contact</mat-checkbox
+                name="employeeOrientation"
+                [(ngModel)]="appFormObj.employeeOrientation"
+                >Employee Orientation</mat-checkbox
               >
             </div>
             <div class="col-md-6">
@@ -432,15 +503,7 @@
               >
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <mat-checkbox
-                name="employeeOrientation"
-                [(ngModel)]="appFormObj.employeeOrientation"
-                >Employee Orientation</mat-checkbox
-              >
-            </div>
-          </div>
+         
           <!-- <div class="row">
             <div class="col-md-6">
               <mat-checkbox
@@ -708,12 +771,12 @@
                   />
                 </mat-form-field>
                 </div>
-                <img *ngIf="socialLinks.length > 1" src="assets/minus.png" style="margin-top: 2%;cursor: pointer;" height="30px" width="30px" (click)="removeSocialLink(i)">
+                <img *ngIf="socialLinks.length > 1" src="assets/minus.png" style="margin-top: 4%;cursor: pointer;" height="20px" width="20px" (click)="removeSocialLink(i)">
 
              
             </div>
           
-              <img src="assets/add-button.png" style="margin-left: 5%;margin-top: 2%;cursor: pointer;" height="30px" width="30px" (click)="addSocialLink()">
+              <img src="assets/add-button.png" style="margin-left: 5%;margin-top: 4%;cursor: pointer;" height="20px" width="20px" (click)="addSocialLink()">
            
           </div>
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ApplicantForm } from './ApplicantForm';
+import { ApplicantForm, ViewLink } from './ApplicantForm';
 import { ApplicantServiceService } from '../Services/applicant-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
@@ -26,6 +26,10 @@ export class MainScreenComponent implements OnInit {
   cities: Array<any> = [];
   provinces: Array<any> = [];
   countries: Array<Object> = [];
+
+  citiesForEmergency: Array<any> = [];
+  provincesForEmergency: Array<any> = [];
+  countriesForEmergency: Array<Object> = [];
 
   dropdownOptions: any[] = [
     {value: 'yes', viewValue: 'Yes'},
@@ -61,6 +65,9 @@ export class MainScreenComponent implements OnInit {
   cityObj: Object;
   countryObj: Object;
   provinceObj: any;
+  cityObjForEmergency: Object;
+  countryObjForEmergency: Object;
+  provinceObjForEmergency: any;
   viewResume;
  
   constructor(private _snackBar: MatSnackBar,private router:Router,private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute,private modalService: NgbModal) { }
@@ -142,18 +149,34 @@ openBase64InNewTab (data, mimeType) {
       this.appFormObj = d.result;
       this.viewResume ="data:" + this.getMIMEtype(this.appFormObj['resumeContentType']) + ";base64," + encodeURI(this.appFormObj["resume"])
       this.socialLinks = JSON.parse(d.result.socialMediaLinks)
-      this.countryObj = this.countries.find(c => c["name"] == d.result.country);
-      this.provinceObj = csc.getStatesOfCountry(this.countryObj["id"]).find(s => s.name == d.result.province);
-      this.cityObj =  csc.getCitiesOfState(this.provinceObj.id).find(cit => cit.name == d.result.city);
-      this.provinces = csc.getStatesOfCountry(this.countryObj["id"]);
-      this.cities = csc.getCitiesOfState(this.provinceObj.id);
+      this.populateDropdowns(d)
+      this.populateDropdownsForEmergencyContacts(d)
       
+      
+      console.log(this.countryObj,this.provinceObj,this.cityObj);
       
     })
 
+  
     
     
     
+  }
+
+  populateDropdownsForEmergencyContacts(d){
+    this.countryObjForEmergency = this.countriesForEmergency.find(coun => coun["name"] == d.result.countryForEmergency);
+    this.provinceObjForEmergency = csc.getStatesOfCountry(this.countryObjForEmergency["id"]).find(ss => ss.name == d.result.provinceForEmergency);
+    this.cityObjForEmergency =  csc.getCitiesOfState(this.provinceObjForEmergency.id).find(city => city.name == d.result.cityForEmergency);
+    this.provincesForEmergency = csc.getStatesOfCountry(this.countryObjForEmergency["id"]);
+    this.citiesForEmergency = csc.getCitiesOfState(this.provinceObjForEmergency.id);
+  }
+
+  populateDropdowns(d){
+    this.countryObj = this.countries.find(c => c["name"] == d.result.country);
+    this.provinceObj = csc.getStatesOfCountry(this.countryObj["id"]).find(s => s.name == d.result.province);
+    this.cityObj =  csc.getCitiesOfState(this.provinceObj.id).find(cit => cit.name == d.result.city);
+    this.provinces = csc.getStatesOfCountry(this.countryObj["id"]);
+    this.cities = csc.getCitiesOfState(this.provinceObj.id);
   }
 
   isemailPresent(){
@@ -164,11 +187,14 @@ openBase64InNewTab (data, mimeType) {
       return true;
     }
   }
+
+  viewLinkObj: ViewLink = new ViewLink()
   sendEmail(){
     if(this.id){
       if(this.responseEmail!= null){
         this.showloading = true;
-        this.applicantService.sendEmail(this.id,this.responseEmail).subscribe(res=>{
+        this.viewLinkObj.email = this.responseEmail;
+        this.applicantService.sendEmail(this.viewLinkObj,this.id).subscribe(res=>{
           
           this._snackBar.open(res.message,"X",{duration: 3000});
           this.showloading = false;
@@ -178,22 +204,6 @@ openBase64InNewTab (data, mimeType) {
       else{      
         this._snackBar.open("Please Provide Email","X",{duration: 3000});
       }
-    // }else{
-    //   if(this.responseEmail!= null){
-    //     this.showloading = true;
-    //     this.applicantService.sendEmail(this.responseId,this.responseEmail).subscribe(res=>{
-          
-    //       this._snackBar.open(res.message,"X",{duration: 3000});
-    //       this.showloading = false;
-    //       if(!this.id){
-    //         this.responseStatus = false;
-    //       }
-    //     });      
-    //   }
-    //   else{      
-    //     this._snackBar.open("Please Provide Email","X",{duration: 3000});
-    //   }
-    // }
     }
     
    
@@ -475,6 +485,21 @@ _handleReaderLoaded(readerEvt) {
       }
     ]
 
+    this.countriesForEmergency = [
+      {
+        id: "38",
+        name: "Canada",
+        phonecode: "1",
+        sortname: "CA"
+      },
+      {
+        id: "231",
+        name: "United States",
+        phonecode: "1",
+        sortname: "US",
+      }
+    ]
+
   }
 
   countryChange(countryObj): void {
@@ -506,6 +531,41 @@ cityChange(cityObj){
   this.appFormObj.city = cityObj.value.name
   console.log(this.appFormObj.city);
   
+
+}
+
+
+
+
+countryChangeForEmergency(countryObj): void {
+  if (countryObj.value) {
+
+    this.provincesForEmergency = csc.getStatesOfCountry(countryObj.value.id)
+    this.appFormObj.countryForEmergency = countryObj.value.name
+    console.log(this.appFormObj.countryForEmergency);
+    this.citiesForEmergency = null
+  }
+  else {
+    this.provincesForEmergency = null;
+    this.citiesForEmergency = null
+  }
+}
+provinceChangeForEmergency(provinceObj): void {
+  if (provinceObj.value) {
+    this.citiesForEmergency = csc.getCitiesOfState(provinceObj.value.id);
+    this.appFormObj.provinceForEmergency = provinceObj.value.name
+    console.log(this.appFormObj.province);
+    
+  }
+  else {
+    this.citiesForEmergency = null;
+  }
+}
+
+cityChangeForEmergency(cityObj){
+this.appFormObj.cityForEmergency = cityObj.value.name
+console.log(this.appFormObj.city);
+
 
 }
  

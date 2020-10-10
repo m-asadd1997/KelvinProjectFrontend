@@ -24,7 +24,8 @@ const routes: Routes = [
     path:"editapplicantform/:id",component:MainScreenComponent},
 
     {path:"viewportfolio/:id",component:ViewportfolioComponent
-  }
+  },
+  {path:"viewportfolio/emaillink/:id/:token",component:ViewportfolioComponent}
 ];
 
 @NgModule({
