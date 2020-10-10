@@ -388,7 +388,6 @@ _handleReaderLoaded(readerEvt) {
   }
 
   downloadFile(){
-    debugger;
     const extension =this.appFormObj.resumeContentType;
     const source =  "data:"+extension +";base64,"+this.appFormObj["resume"];//new Blob([this.applicantObj["resume"]], { type: this.getMIMEtype(this.applicantObj['resumeContentType']) });
     const downloadLink = document.createElement("a");
