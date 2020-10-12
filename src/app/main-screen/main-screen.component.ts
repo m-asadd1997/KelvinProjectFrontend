@@ -317,26 +317,6 @@ _handleReaderLoaded(readerEvt) {
     }
 
 
-    // try {
-    //   if (event.target.files && event.target.files.length > 0) {
-    //     let file = event.target.files[0];
-    //     if (this.fileExtensionAllowed(file.name)) {
-    //       this.appFormObj.resumeContentType = this.getFileExtension(file.name)
-        
-    //       reader.onload = this._handleReaderLoaded.bind(this);
-         
-          
-    //       reader.readAsBinaryString(file);
-    //     }
-    //     // else this.toastService.error('Unsuccessful', 'Candidate Profile failed');
-    //     console.log("pdf type", this.appFormObj.resumeContentType);
-        
-
-    //   }
-    // }
-    // catch (error) {
-    //   console.log(error);
-    // }
   }
 
   onImageChange(event,field) {
@@ -345,12 +325,8 @@ _handleReaderLoaded(readerEvt) {
       let file = event.target.files[0];
       reader.onload =this._handleReaderImageLoaded.bind(this,field);
       this.appFormObj[field] = file.type
-      //console.log("1"+this.appFormObj.resumeContentType)
       reader.readAsBinaryString(file);
-      // console.log("field" , field);
-      // console.log(this.appFormObj.userImage);
-      
-      
+     
       
     }
   }
@@ -429,7 +405,13 @@ _handleReaderLoaded(readerEvt) {
 
   formValidation(){
 
-    if(this.appFormObj.name && (this.appFormObj.homeNumber || this.appFormObj.cellNumber) && this.appFormObj.placeOfBirth  && this.appFormObj.resume && this.appFormObj.visaDetails && this.appFormObj.gender && this.appFormObj.dateOfBirth && this.appFormObj.address && this.appFormObj.emergencyPhone && this.appFormObj.emergencyName && this.appFormObj.zipCode && this.appFormObj.city && this.appFormObj.country && this.appFormObj.province){
+    if(this.appFormObj.name && (this.appFormObj.homeNumber || this.appFormObj.cellNumber) && this.appFormObj.placeOfBirth  &&
+     this.appFormObj.resume && this.appFormObj.visaDetails && this.appFormObj.gender && this.appFormObj.dateOfBirth &&
+      this.appFormObj.address && this.appFormObj.emergencyPhone && this.appFormObj.emergencyName && this.appFormObj.zipCode &&
+       this.appFormObj.city && this.appFormObj.country && this.appFormObj.province && this.appFormObj.zipCodeForEmergency &&
+        this.appFormObj.position && this.appFormObj.wage && this.appFormObj.cityForEmergency && this.appFormObj.provinceForEmergency &&
+        this.appFormObj.countryForEmergency && this.appFormObj.emergencyAddress && this.appFormObj.securityClearance && this.appFormObj.employeeApplication
+        && this.appFormObj.employeeIdentification){
       
       return false;
       
@@ -446,16 +428,7 @@ _handleReaderLoaded(readerEvt) {
     socialLink : "",
     socialSite: ""
    })
-    //let socialLink = this.socialLink;
-    // let socialSite = this.socialSite
-    // this.socialLinks.push({
-    //   link:socialLink,
-    //   site:socialSite
-    // })
-
-    // console.log("social media obj", this.socialLinks)
-    // socialLink = ""
-    // socialSite = ""
+  
   }
 
   removeSocialLink(i: number) {

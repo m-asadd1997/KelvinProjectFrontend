@@ -94,7 +94,7 @@ export class ViewportfolioComponent implements OnInit {
 
   downloadFile(){
     
-    const extension =this.getMIMEtype(this.applicantObj['resumeContentType']);
+    const extension =this.applicantObj.resumeContentType;
     const source =  "data:"+extension +";base64,"+this.applicantObj["resume"];//new Blob([this.applicantObj["resume"]], { type: this.getMIMEtype(this.applicantObj['resumeContentType']) });
     const downloadLink = document.createElement("a");
     const fileName = "download."+extension;

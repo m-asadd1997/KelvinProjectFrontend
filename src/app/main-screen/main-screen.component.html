@@ -79,6 +79,8 @@
     <div class="col-md-6">
       <mat-card>
         <form class="example-form" #myForm="ngForm">
+          <mat-horizontal-stepper  #stepper>
+            <mat-step>
           <div class="row">
             <div class="col-md-5">
           <h3>Personal Information</h3>
@@ -197,6 +199,11 @@
               </mat-form-field>
             </div>
           </div>
+          <div>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+        <mat-step>
           <h3>Address Details</h3>
           <div class="row">
             <div class="col-md-12">
@@ -276,7 +283,12 @@
            
           </div>
         </div>
-
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step>
           <h3>Emergency Contact Info</h3>
           <div class="row">
             <div class="col-md-12">
@@ -315,6 +327,7 @@
               <mat-form-field class="example-full-width">
                 <mat-label>Street Address </mat-label>
                 <input
+                required
                   style="width: 100%"
                   matInput
                   placeholder="Emergency Address"
@@ -389,8 +402,50 @@
           </div>
          
 
-        
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+        <mat-step>
+          <h3>Assignement Details</h3>
+          <div class="row">
+            <div class="col-md-12">
+              <mat-form-field class="example-full-width">
+                <mat-label>Position </mat-label>
+                <input
+                required
+                  style="width: 100%"
+                  matInput
+                  placeholder="Position"
+                  name="position"
+                  [(ngModel)]="appFormObj.position"
+                />
+              </mat-form-field>
+            </div>
+          </div>
 
+          <div class="row">
+            <div class="col-md-12">
+              <mat-form-field class="example-full-width">
+                <mat-label>Wage </mat-label>
+                <input
+                required
+                  style="width: 100%"
+                  matInput
+                  placeholder="Wage"
+                  name="wage"
+                  [(ngModel)]="appFormObj.wage"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+        <mat-step>
           <h3>Documentation</h3>
           <div class="row">
             <mat-label style="font-size: 1em; margin-left: 3%"
@@ -504,15 +559,7 @@
             </div>
           </div>
          
-          <!-- <div class="row">
-            <div class="col-md-6">
-              <mat-checkbox
-                name="securityClearance"
-                [(ngModel)]="appFormObj.securityClearance"
-                >Security Clearence</mat-checkbox
-              >
-            </div>
-          </div> -->
+          
           <br />
 
           <div class="row">
@@ -737,8 +784,13 @@
             </div>
           
           </div>
-          <br />
-
+          
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+        <mat-step>
           <h3>Social Media Information</h3>
           <div class="row" >
            
@@ -776,7 +828,7 @@
              
             </div>
           
-              <img src="assets/add-button.png" style="margin-left: 5%;margin-top: 4%;cursor: pointer;" height="20px" width="20px" (click)="addSocialLink()">
+              <img src="assets/add-button.png" style="margin-left: 0%;margin-top: 4%;cursor: pointer;" height="20px" width="20px" (click)="addSocialLink()">
            
           </div>
 
@@ -791,6 +843,7 @@
                 Save
               </button>
             </div>
+           
             <!-- <div *ngIf="showSaveLoading" class="spinner-border" role="status">
               <span class="sr-only">Loading...</span>
             </div> -->
@@ -845,11 +898,17 @@
                   Email
                 </button>
               </div>
+            </div>  <div class="col-md-2">
+              <button mat-button matStepperPrevious>Back</button>
+             
             </div>
             <!-- <div *ngIf="showloading" class="spinner-border" role="status">
               <span class="sr-only">Loading...</span>
             </div> -->
           </div>
+         
+        </mat-step>
+        </mat-horizontal-stepper>
         </form>
       </mat-card>
     </div>
