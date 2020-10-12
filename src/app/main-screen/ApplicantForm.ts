@@ -40,6 +40,8 @@ export interface ApplicantForm {
     cityForEmergency?:String;
     canadianCitizenshipDetails?:String;
     visaExpiryDate?:String;
+    wage?:String;
+    position?:String;
   }
   
   export class ApplicantForm implements ApplicantForm {

@@ -40,6 +40,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer'
 import { NgxUiLoaderModule,NgxUiLoaderHttpModule  } from 'ngx-ui-loader';
+import {MatStepperModule} from '@angular/material/stepper';
 
 
 @NgModule({
@@ -82,7 +83,8 @@ import { NgxUiLoaderModule,NgxUiLoaderHttpModule  } from 'ngx-ui-loader';
     NgxDocViewerModule,
     NgxExtendedPdfViewerModule,
     NgxUiLoaderHttpModule.forRoot({ showForeground: true }),
-    NgxUiLoaderModule
+    NgxUiLoaderModule,
+    MatStepperModule
     
   ],
   providers: [
