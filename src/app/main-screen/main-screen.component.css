@@ -1,6 +1,9 @@
 *{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+::ng-deep .mat-horizontal-stepper-header-container {
+  display: none !important;
+}
 .example-form {
     min-width: 150px;
     max-width: 500px;
@@ -39,7 +42,10 @@ label{
   display: table;
   color: #fff;
    }
-
+.mat-save {
+    background-color:#fe0024;
+    color: #fff;
+}
 
 
 

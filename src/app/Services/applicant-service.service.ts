@@ -13,7 +13,7 @@ export class ApplicantServiceService {
   constructor(private http: HttpClient) { }
    url:any = environment.baseUrl;
   saveApplicantForm(appObj: any):Observable<any>{
-    return this.http.post(this.url+"api/applicant-form",appObj)
+    return this.http.post(this.url+"api/applicant-form/",appObj)
   }
 
   getApplicantFields():Observable<any>{

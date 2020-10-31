@@ -10,7 +10,9 @@ export interface ApplicantForm {
     visaWorkOptions?:string;
     address?: string;
     gender?: string;
-    placeOfBirth?: string;
+    cityForPlaceOfBirth?:String;
+    provinceForPlaceOfBirth?:String;
+    countryForPlaceOfBirth?:String;
     dateOfBirth?: Date;
     visaDetails?: string;
     citizenship?: string;
@@ -19,7 +21,8 @@ export interface ApplicantForm {
     employeeApplication?: String;
     employeeOrientation?: boolean;
     employeeIdentification?: String;
-    securityClearance?: boolean;
+    otherCertification?: String;
+    securityClearance?: String;
     medicalClearance?: String;
     employeeWellness?: boolean;
     emergencyContact?: boolean;
@@ -29,6 +32,7 @@ export interface ApplicantForm {
     emergencyAddress?:String;
     emergencyPhone?:String;
     emergencyName?:String;
+    emergencyEmail?:String;
     profileId?:String;
     zipCode?:String;
     country?:String;
@@ -42,6 +46,14 @@ export interface ApplicantForm {
     visaExpiryDate?:String;
     wage?:String;
     position?:String;
+    draft?: boolean;
+    companyName?:String;
+    countryForCompany?:String;
+    provinceForCompany?:String;
+    cityForCompany?:String;
+    latitude?:any;
+    longitude?:any;
+    addressForCompany?:String;
   }
   
   export class ApplicantForm implements ApplicantForm {
@@ -54,7 +66,6 @@ export interface ApplicantForm {
       public recevierEmail?: string,
       public address?: string,
       public gender?: string,
-      public placeOfBirth?: string,
       public dateOfBirth?: Date,
       public visaDetails?: string,
       public citizenship?: string,
@@ -63,15 +74,19 @@ export interface ApplicantForm {
       // public employeeApplication?: boolean,
       public employeeOrientation?: boolean,
       public employeeIdentification?: String,
-      public securityClearance?: boolean,
+      // public securityClearance?: boolean,
       // public medicalClearance?: boolean,
       public employeeWellness?: boolean,
-      public emergencyContact?: boolean
+      public emergencyContact?: boolean,
+      public companyName?:String,
+      public addressForCompany?:String,
+      public draft?: boolean
     ) {
       // this.employeeApplication = this.employeeApplication || false;
+      this.draft = this.draft || true;
       this.employeeOrientation = this.employeeOrientation || false;
       // this.employeeIdentification = this.employeeIdentification || false;
-      this.securityClearance = this.securityClearance || false;
+      // this.securityClearance = this.securityClearance || false;
       // this.medicalClearance = this.medicalClearance || false;
       this.employeeWellness = this.employeeWellness || false;
       this.emergencyContact = this.emergencyContact || false;

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { ApplicantForm, ViewLink } from './ApplicantForm';
 import { ApplicantServiceService } from '../Services/applicant-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,17 +8,19 @@ import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { JsonpInterceptor } from '@angular/common/http';
 import csc from 'country-state-city'
-
+import { MatStepper } from '@angular/material/stepper';
+import { MapsAPILoader } from '@agm/core';
 @Component({
   selector: 'app-main-screen',
   templateUrl: './main-screen.component.html',
   styleUrls: ['./main-screen.component.css']
 })
 export class MainScreenComponent implements OnInit {
-
+isLinear = true;
   resume:File;
   photo:File;
   id : any;
+  zoom: number = 15;
   responseStatus = false;
   responseId :any;
   responseEmail : any;
@@ -30,6 +32,14 @@ export class MainScreenComponent implements OnInit {
   citiesForEmergency: Array<any> = [];
   provincesForEmergency: Array<any> = [];
   countriesForEmergency: Array<Object> = [];
+
+  citiesForCompany: Array<any> = [];
+  provincesForCompany: Array<any> = [];
+  countriesForCompany: Array<Object> = [];
+
+  citiesForPlaceOfBirth: Array<any> = [];
+  provincesForPlaceOfBirth: Array<any> = [];
+  countriesForPlaceOfBirth: Array<Object> = [];
 
   dropdownOptions: any[] = [
     {value: 'yes', viewValue: 'Yes'},
@@ -65,16 +75,32 @@ export class MainScreenComponent implements OnInit {
   cityObj: Object;
   countryObj: Object;
   provinceObj: any;
+  countryObjPlaceOfBirth: Object;
+  provinceObjPlaceOfBirth: any;
+  cityObjPlaceOfBirth: Object;
   cityObjForEmergency: Object;
   countryObjForEmergency: Object;
   provinceObjForEmergency: any;
+  cityObjForCompany: Object;
+  countryObjForCompany: Object;
+  provinceObjForCompany: any;
   viewResume;
- 
-  constructor(private _snackBar: MatSnackBar,private router:Router,private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute,private modalService: NgbModal) { }
+  longitude= 51.678418;address: any;
+;
+  latitude= 7.809007;
+  private geoCoder;
+  @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild('search')
+  public searchElementRef: ElementRef;
+  
+  constructor(private _snackBar: MatSnackBar,private router:Router,
+    private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute,
+    private modalService: NgbModal,private mapsAPILoader: MapsAPILoader,private ngZone: NgZone) { }
 
   ngOnInit(): void {
 
     this.appFormObj.kpiCertified = false;
+    this.appFormObj.draft = true;
     this.id = this.activateRoute.snapshot.params['id'];
     this.getCountries();
   
@@ -83,9 +109,33 @@ export class MainScreenComponent implements OnInit {
     this.responseStatus = true;
       this.getApplicantById(this.id)
     }
+    this.getCurrentLocationOnPageLoad();
+    this.loadMap()
       
   }
+  getCurrentLocationOnPageLoad() {
+    this.getPosition().then(pos => {
 
+      this.appFormObj.longitude = pos.lng;
+      this.appFormObj.latitude = pos.lat;
+
+
+    });
+  }
+  getPosition(): Promise<any> {
+    return new Promise((resolve, reject) => {
+
+      navigator.geolocation.getCurrentPosition(resp => {
+
+        resolve({ lng: resp.coords.longitude, lat: resp.coords.latitude });
+      },
+        err => {
+          reject(err);
+        });
+    });
+
+
+  }
   check(){
     this.appFormObj.kpiCertified = !this.appFormObj.kpiCertified
     console.log(this.appFormObj.kpiCertified); 
@@ -151,34 +201,55 @@ openBase64InNewTab (data, mimeType) {
       this.socialLinks = JSON.parse(d.result.socialMediaLinks)
       this.populateDropdowns(d)
       this.populateDropdownsForEmergencyContacts(d)
+      this.populateDropdownsForPlaceOfBirth(d)
+      this.populateDropdownsForCompanyContacts(d)
       
       
       console.log(this.countryObj,this.provinceObj,this.cityObj);
       
     })
-
-  
-    
-    
-    
   }
 
   populateDropdownsForEmergencyContacts(d){
+    if(d.result.countryForEmergency){
     this.countryObjForEmergency = this.countriesForEmergency.find(coun => coun["name"] == d.result.countryForEmergency);
     this.provinceObjForEmergency = csc.getStatesOfCountry(this.countryObjForEmergency["id"]).find(ss => ss.name == d.result.provinceForEmergency);
     this.cityObjForEmergency =  csc.getCitiesOfState(this.provinceObjForEmergency.id).find(city => city.name == d.result.cityForEmergency);
     this.provincesForEmergency = csc.getStatesOfCountry(this.countryObjForEmergency["id"]);
     this.citiesForEmergency = csc.getCitiesOfState(this.provinceObjForEmergency.id);
+    }
   }
 
+  populateDropdownsForCompanyContacts(d){
+    if(d.result.countryForCompany){
+    this.countryObjForCompany = this.countriesForCompany.find(coun => coun["name"] == d.result.countryForCompany);
+    this.provinceObjForCompany = csc.getStatesOfCountry(this.countryObjForCompany["id"]).find(ss => ss.name == d.result.provinceForCompany);
+    this.cityObjForCompany =  csc.getCitiesOfState(this.provinceObjForCompany.id).find(city => city.name == d.result.cityForCompany);
+    this.provincesForCompany = csc.getStatesOfCountry(this.countryObjForCompany["id"]);
+    this.citiesForCompany = csc.getCitiesOfState(this.provinceObjForCompany.id);
+  }
+}
+
   populateDropdowns(d){
+    if(d.result.country){
     this.countryObj = this.countries.find(c => c["name"] == d.result.country);
     this.provinceObj = csc.getStatesOfCountry(this.countryObj["id"]).find(s => s.name == d.result.province);
     this.cityObj =  csc.getCitiesOfState(this.provinceObj.id).find(cit => cit.name == d.result.city);
     this.provinces = csc.getStatesOfCountry(this.countryObj["id"]);
     this.cities = csc.getCitiesOfState(this.provinceObj.id);
+      }
   }
 
+  populateDropdownsForPlaceOfBirth(d){
+    
+    this.countryObjPlaceOfBirth = this.countriesForPlaceOfBirth.find(coun => coun["name"] == d.result.countryForPlaceOfBirth);
+    this.provinceObjPlaceOfBirth = csc.getStatesOfCountry(this.countryObjPlaceOfBirth["id"]).find(ss => ss.name == d.result.provinceForPlaceOfBirth);
+    this.cityObjPlaceOfBirth =  csc.getCitiesOfState(this.provinceObjPlaceOfBirth.id).find(city => city.name == d.result.cityForPlaceOfBirth);
+    this.provincesForPlaceOfBirth = csc.getStatesOfCountry(this.countryObjPlaceOfBirth["id"]);
+    this.citiesForPlaceOfBirth = csc.getCitiesOfState(this.provinceObjPlaceOfBirth.id);
+  }
+
+//TODO:Need to remove below code
   isemailPresent(){
     if(this.appFormObj.recevierEmail){
       return false;
@@ -187,29 +258,124 @@ openBase64InNewTab (data, mimeType) {
       return true;
     }
   }
+   isEmpty(value){
+    return (value == null || value.length === 0);
+  }
+  onNextPersonalInformation(form : NgForm,callApi:Boolean) {
+    // Validate your value in the function
+    if (this.isEmpty(this.appFormObj.name) || this.isEmpty(this.appFormObj.email) 
+        || (this.isEmpty(this.appFormObj.homeNumber)  || this.isEmpty(this.appFormObj.cellNumber)) 
+        || this.isEmpty(this.appFormObj.gender) || this.isEmpty(this.appFormObj.dateOfBirth) 
+        || this.isEmpty(this.appFormObj.cityForPlaceOfBirth)) {      
+      this.stepper.selected.completed = false;
+    }
+    else{
+      if(callApi){
+        this.savePersonalInformation(form);
+      }else{
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+      }
+    }
+  }
+
+
+  onNextAddressDetail(form:NgForm,callApi:Boolean){
+    if (this.isEmpty(this.appFormObj.address) || this.isEmpty(this.appFormObj.zipCode) 
+        || this.isEmpty(this.appFormObj.city)) {      
+      this.stepper.selected.completed = false;
+    }
+    else{
+      if(callApi){
+        this.savePersonalInformation(form);
+      }else{
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+      }
+    }
+  }
+
+  onNextEmergencyContact(form:NgForm,callApi:Boolean){
+    if (this.isEmpty(this.appFormObj.emergencyName) || this.isEmpty(this.appFormObj.emergencyEmail) 
+        || this.isEmpty(this.appFormObj.emergencyPhone)|| this.isEmpty(this.appFormObj.emergencyAddress) 
+        || this.isEmpty(this.appFormObj.cityForEmergency) || this.isEmpty(this.appFormObj.zipCodeForEmergency)) {      
+      this.stepper.selected.completed = false;
+    }
+    else{
+      if(callApi){
+        this.savePersonalInformation(form);
+      }else{
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+      }
+    }
+  }
+
+  onNextAssignmentDetail(form:NgForm,callApi:Boolean){
+    if (this.isEmpty(this.appFormObj.position) || this.isEmpty(this.appFormObj.wage)
+    || this.isEmpty(this.appFormObj.companyName) ||
+    // this.isEmpty(this.appFormObj.cityForCompany)
+    this.isEmpty(this.appFormObj.addressForCompany)
+    ) {      
+      this.stepper.selected.completed = false;
+    }
+    else{
+      if(callApi){
+        this.savePersonalInformation(form);
+      }else{
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+      }
+    }
+  }
+
+  onNextSupportingDoc(form:NgForm,callApi:Boolean){
+    if (this.isEmpty(this.appFormObj.visaDetails) || this.isEmpty(this.appFormObj.citizenship) 
+        || this.isEmpty(this.appFormObj.securityClearance)|| this.isEmpty(this.appFormObj.employeeApplication) 
+        || this.isEmpty(this.appFormObj.employeeIdentification) || this.isEmpty(this.appFormObj.resume)) {      
+      this.stepper.selected.completed = false;
+    }
+    else{
+      if(callApi){
+        this.savePersonalInformation(form);
+      }else{
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+      }
+    }
+  }
+
+  onSaveApplicantForm(form:NgForm,){
+    this.appFormObj.draft =false;
+    this.savePersonalInformation(form);
+  }
 
   viewLinkObj: ViewLink = new ViewLink()
   sendEmail(){
-    if(this.id){
-      if(this.responseEmail!= null){
-        this.showloading = true;
-        this.viewLinkObj.email = this.responseEmail;
-        this.applicantService.sendEmail(this.viewLinkObj,this.id).subscribe(res=>{
-          
-          this._snackBar.open(res.message,"X",{duration: 3000});
-          this.showloading = false;
-         
-        });      
-      }
-      else{      
-        this._snackBar.open("Please Provide Email","X",{duration: 3000});
-      }
+    // if(this.id){
+    //   if(this.responseEmail!= null){
+    //     this.showloading = true;
+    //     this.viewLinkObj.email = this.responseEmail;
+    //     this.applicantService.sendEmail(this.viewLinkObj,this.id).subscribe(res=>{
+    //       this._snackBar.open(res.message,"X",{duration: 3000});
+    //       this.showloading = false;
+    //     });      
+    //   }
+    //   else{      
+    //     this._snackBar.open("Please Provide Email","X",{duration: 3000});
+    //   }
+    // }
+    if(this.appFormObj.recevierEmail){
+      this.showloading = true;
+      this.viewLinkObj.email = this.appFormObj.recevierEmail;
+      this.applicantService.sendEmail(this.viewLinkObj,this.id).subscribe(res=>{
+        this._snackBar.open("Email has been sent to "+this.appFormObj.recevierEmail,"X",{duration: 3000});
+        this.showloading = false;
+      }); 
+    }else{
+      this._snackBar.open("Please Provide Email","X",{duration: 3000});
     }
-    
-   
-    
   }
-
 
   openFile(){
     document.querySelector('input').click()
@@ -219,14 +385,11 @@ openBase64InNewTab (data, mimeType) {
   }
 
   saveApplicantForm(myForm : NgForm){
+
     this.appFormObj.socialMediaLinks = JSON.stringify(this.socialLinks);
-    // console.log("============>",JSON.stringify(this.socialLinks));
-    
     this.disableSaveButton = true;
-    // this.responseStatus = true;
-    // this.disableSaveButton = true;
     this.responseId = null;
-    console.log("this is form data "+this.appFormObj)
+
     if(this.id){
       this.showSaveLoading = true;
       this.applicantService.updateApplicantForm(this.id,this.appFormObj).subscribe(d=>{
@@ -244,7 +407,7 @@ openBase64InNewTab (data, mimeType) {
           this.responseStatus = false;
           this._snackBar.open("Error","X",{duration: 3000});
         }
-        console.log(d);
+        
       })
     }else{
       this.showSaveLoading = true;
@@ -271,22 +434,75 @@ openBase64InNewTab (data, mimeType) {
         console.log(error)
       }
       )
-
     }
-    
     // this.createBase64String(this.appFormObj);
-   
-
   }
 
  
-
+  savePersonalInformation(myForm : NgForm){
+    this.appFormObj.socialMediaLinks = JSON.stringify(this.socialLinks);
+    
+    this.showSaveLoading = true;
+    if(this.responseId || this.id){
+      let recordId = this.responseId != null ?this.responseId :this.id;
+      
+      this.appFormObj.draft=this.formValidation();
+      
+      this.applicantService.updateApplicantForm(recordId,this.appFormObj).subscribe(d=>{
+        if(d['status'] === 200){
+          this.showSaveLoading = false;
+          this.responseId = d['result'].id;
+          
+          this.responseStatus = true;
+          //this.openSnackBar("done")
+          this._snackBar.open("Success","X",{duration: 3000});
+          if(!this.formValidation()){
+            myForm.reset();
+            this.goToapplicantTable();
+          }else{
+            this.stepper.selected.completed = true;
+            this.stepper.next();
+          }
+        }
+        else{
+          this.responseStatus = false;
+          this._snackBar.open("Error","X",{duration: 3000});
+        }
+        console.log(d);
+      })
+    }else{
+      this.appFormObj.profileId = "p-" + this.GenerateUniqueID(); 
+      this.applicantService.saveApplicantForm(this.appFormObj).subscribe(d=>{
+        if(d['status']===200){
+          this.showSaveLoading = false;
+          this.responseId = d['result'].id;
+          console.log(this.responseId)
+          this._snackBar.open("Success","X",{duration: 3000});
+          if(!this.formValidation()){
+            myForm.reset();
+            this.goToapplicantTable();
+          }else{
+            this.stepper.selected.completed = true;
+            this.stepper.next();
+          }
+        }
+        else{
+          this.responseStatus = false;
+          this._snackBar.open("Error","X",{duration: 3000});
+        }
+        console.log(d);
+      },
+      error=>{
+        console.log(error)
+      }
+      )
+  }
+}
 
   
 _handleReaderLoaded(readerEvt) {
    var binaryString = readerEvt.target.result;
           let base64textString= btoa(binaryString);
-          //console.log(btoa(binaryString));
           this.appFormObj.resume = base64textString;
           this.viewResume = "data:" + this.getMIMEtype(this.appFormObj['resumeContentType']) + ";base64," + encodeURI(this.appFormObj["resume"])
           
@@ -294,16 +510,10 @@ _handleReaderLoaded(readerEvt) {
   }
   
   _handleReaderImageLoaded(field,readerEvt) {
-    var binaryString = readerEvt.target.result;
-           let base64textString= btoa(binaryString);
-           //console.log(btoa(binaryString));
-           this.appFormObj[field] = base64textString;
-          // console.log(this.appFormObj.resume)
-           
+      var binaryString = readerEvt.target.result;
+      let base64textString= btoa(binaryString);
+      this.appFormObj[field] = base64textString;
    }
-
-
-   
 
   onFileChange(event) {
     let reader = new FileReader();
@@ -311,7 +521,6 @@ _handleReaderLoaded(readerEvt) {
       let file = event.target.files[0];
       reader.onload =this._handleReaderLoaded.bind(this);
       this.appFormObj.resumeContentType = this.getFileExtension(file.name)
-     // console.log("1"+this.appFormObj.resumeContentType)
       reader.readAsBinaryString(file);
       
     }
@@ -404,14 +613,16 @@ _handleReaderLoaded(readerEvt) {
 
 
   formValidation(){
-
-    if(this.appFormObj.name && (this.appFormObj.homeNumber || this.appFormObj.cellNumber) && this.appFormObj.placeOfBirth  &&
+    if(this.appFormObj.name && (this.appFormObj.homeNumber || this.appFormObj.cellNumber) && this.appFormObj.cityForPlaceOfBirth  &&
      this.appFormObj.resume && this.appFormObj.visaDetails && this.appFormObj.gender && this.appFormObj.dateOfBirth &&
-      this.appFormObj.address && this.appFormObj.emergencyPhone && this.appFormObj.emergencyName && this.appFormObj.zipCode &&
+      this.appFormObj.address && this.appFormObj.emergencyPhone && this.appFormObj.emergencyName && this.appFormObj.emergencyEmail && this.appFormObj.zipCode &&
        this.appFormObj.city && this.appFormObj.country && this.appFormObj.province && this.appFormObj.zipCodeForEmergency &&
         this.appFormObj.position && this.appFormObj.wage && this.appFormObj.cityForEmergency && this.appFormObj.provinceForEmergency &&
         this.appFormObj.countryForEmergency && this.appFormObj.emergencyAddress && this.appFormObj.securityClearance && this.appFormObj.employeeApplication
-        && this.appFormObj.employeeIdentification){
+        && this.appFormObj.employeeIdentification && this.appFormObj.companyName && 
+        // this.appFormObj.cityForCompany
+        this.appFormObj.addressForCompany && this.appFormObj.recevierEmail
+        ){
       
       return false;
       
@@ -420,10 +631,8 @@ _handleReaderLoaded(readerEvt) {
       return true;
     }
   }
-
   
   addSocialLink(){
-    console.log(this.socialLinks)
    this.socialLinks.push({
     socialLink : "",
     socialSite: ""
@@ -473,14 +682,41 @@ _handleReaderLoaded(readerEvt) {
       }
     ]
 
+    this.countriesForPlaceOfBirth = [
+      {
+        id: "38",
+        name: "Canada",
+        phonecode: "1",
+        sortname: "CA"
+      },
+      {
+        id: "231",
+        name: "United States",
+        phonecode: "1",
+        sortname: "US",
+      }
+    ]
+    
+    this.countriesForCompany = [
+      {
+        id: "38",
+        name: "Canada",
+        phonecode: "1",
+        sortname: "CA"
+      },
+      {
+        id: "231",
+        name: "United States",
+        phonecode: "1",
+        sortname: "US",
+      }
+    ]
   }
 
   countryChange(countryObj): void {
     if (countryObj.value) {
-
       this.provinces = csc.getStatesOfCountry(countryObj.value.id)
-      this.appFormObj.country = countryObj.value.name
-      console.log(this.appFormObj.country);
+      this.appFormObj.country = countryObj.value.name;
       this.cities = null
     }
     else {
@@ -491,9 +727,7 @@ _handleReaderLoaded(readerEvt) {
   provinceChange(provinceObj): void {
     if (provinceObj.value) {
       this.cities = csc.getCitiesOfState(provinceObj.value.id);
-      this.appFormObj.province = provinceObj.value.name
-      console.log(this.appFormObj.province);
-      
+      this.appFormObj.province = provinceObj.value.name;
     }
     else {
       this.cities = null;
@@ -502,20 +736,13 @@ _handleReaderLoaded(readerEvt) {
 
 cityChange(cityObj){
   this.appFormObj.city = cityObj.value.name
-  console.log(this.appFormObj.city);
-  
-
 }
-
-
 
 
 countryChangeForEmergency(countryObj): void {
   if (countryObj.value) {
-
     this.provincesForEmergency = csc.getStatesOfCountry(countryObj.value.id)
-    this.appFormObj.countryForEmergency = countryObj.value.name
-    console.log(this.appFormObj.countryForEmergency);
+    this.appFormObj.countryForEmergency = countryObj.value.name;
     this.citiesForEmergency = null
   }
   else {
@@ -526,9 +753,7 @@ countryChangeForEmergency(countryObj): void {
 provinceChangeForEmergency(provinceObj): void {
   if (provinceObj.value) {
     this.citiesForEmergency = csc.getCitiesOfState(provinceObj.value.id);
-    this.appFormObj.provinceForEmergency = provinceObj.value.name
-    console.log(this.appFormObj.province);
-    
+    this.appFormObj.provinceForEmergency = provinceObj.value.name;
   }
   else {
     this.citiesForEmergency = null;
@@ -536,12 +761,124 @@ provinceChangeForEmergency(provinceObj): void {
 }
 
 cityChangeForEmergency(cityObj){
-this.appFormObj.cityForEmergency = cityObj.value.name
-console.log(this.appFormObj.city);
-
-
+  this.appFormObj.cityForEmergency = cityObj.value.name;
 }
  
+
+countryChangeForPlaceOfBirth(countryObj): void {
+  if (countryObj.value) {
+
+    this.provincesForPlaceOfBirth = csc.getStatesOfCountry(countryObj.value.id)
+    this.appFormObj.countryForPlaceOfBirth = countryObj.value.name;
+    this.citiesForPlaceOfBirth = null
+  }
+  else {
+    this.provincesForPlaceOfBirth = null;
+    this.citiesForPlaceOfBirth = null
+  }
+}
+provinceChangeForPlaceOfBirth(provinceObj): void {
+  if (provinceObj.value) {
+    this.citiesForPlaceOfBirth = csc.getCitiesOfState(provinceObj.value.id);
+    this.appFormObj.provinceForPlaceOfBirth = provinceObj.value.name 
+  }
+  else {
+    this.citiesForPlaceOfBirth = null;
+  }
+}
+
+cityChangeForPlaceOfBirth(cityObj){
+  this.appFormObj.cityForPlaceOfBirth = cityObj.value.name
+}
+
+countryChangeForCompany(countryObj): void {
+  if (countryObj.value) {
+
+    this.provincesForCompany = csc.getStatesOfCountry(countryObj.value.id)
+    this.appFormObj.countryForCompany = countryObj.value.name
+    console.log(this.appFormObj.countryForCompany);
+    this.citiesForCompany = null
+  }
+  else {
+    this.provincesForCompany = null;
+    this.citiesForCompany = null
+  }
+}
+provinceChangeForCompany(provinceObj): void {
+  if (provinceObj.value) {
+    this.citiesForCompany = csc.getCitiesOfState(provinceObj.value.id);
+    this.appFormObj.provinceForCompany = provinceObj.value.name
+  }
+  else {
+    this.citiesForCompany = null;
+  }
+}
+
+cityChangeForCompany(cityObj){
+  this.appFormObj.cityForCompany = cityObj.value.name
+}
+
+
+loadMap(): Promise<any> {
+  return new Promise((resolve, reject) => {
+
+    this.mapsAPILoader.load().then(() => {
+    
+        this.setCurrentLocation();
+      this.geoCoder = new google.maps.Geocoder;
+
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
+      autocomplete.addListener("place_changed", () => {
+        this.ngZone.run(() => {
+          //get the place result
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+          //verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+
+
+          //set latitude, longitude and zoom
+          this.appFormObj.latitude = place.geometry.location.lat();
+          this.appFormObj.longitude = place.geometry.location.lng();
+
+        });
+      });
+
+      resolve();
+    })
+  })
+
+}
+
+private setCurrentLocation() {
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.appFormObj.latitude = position.coords.latitude;
+      this.appFormObj.longitude = position.coords.longitude;
+
+      this.getAddress(this.appFormObj.latitude, this.appFormObj.longitude);
+    });
+  }
+}
+
+getAddress(latitude, longitude) {
+  this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
+    if (status === 'OK') {
+      if (results[0]) {
+
+        this.address = results[0].formatted_address;
+      } else {
+        window.alert('No results found');
+      }
+    } else {
+      window.alert('Geocoder failed due to: ' + status);
+    }
+
+  });
+}
+
 }
 
 

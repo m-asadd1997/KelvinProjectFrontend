@@ -28,6 +28,7 @@ import {MatIconModule} from '@angular/material/icon';
 
 import { ViewportfolioComponent } from './viewportfolio/viewportfolio.component';
 import {MatDividerModule} from '@angular/material/divider';
+import { AgmCoreModule } from '@agm/core';
 
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -41,6 +42,7 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer'
 import { NgxUiLoaderModule,NgxUiLoaderHttpModule  } from 'ngx-ui-loader';
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -84,7 +86,13 @@ import {MatStepperModule} from '@angular/material/stepper';
     NgxExtendedPdfViewerModule,
     NgxUiLoaderHttpModule.forRoot({ showForeground: true }),
     NgxUiLoaderModule,
-    MatStepperModule
+    MatStepperModule,
+    MatTooltipModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBlJXvfmTzROsErUkaOufPA5vg4K18X79E',
+      libraries: ['places']
+    })
+  
     
   ],
   providers: [
