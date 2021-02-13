@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from './login.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login-page',
@@ -10,7 +11,7 @@ import { LoginService } from './login.service';
 export class LoginPageComponent implements OnInit {
   errorVisible=false;
   showLoading = false;
-  constructor(private router: Router, private service:LoginService) { }
+  constructor(private router: Router, private service:LoginService,private toastr: ToastrService) { }
 
   ngOnInit(): void {
     localStorage.clear();
@@ -35,6 +36,7 @@ export class LoginPageComponent implements OnInit {
       this.service.checkUserandPass(uname, p).subscribe(
         res => {
           if(res.status=="200"){
+            this.toastr.success(res.message,"Login Successfull");
             this.showLoading = false;
             console.log('toker', res);
   
@@ -48,14 +50,15 @@ export class LoginPageComponent implements OnInit {
             }, 1000);
           }
           else{
-           
+            this.toastr.error(res.message,"Login Unsuccessfull");
             
             this.router.navigate(['']);
           }
        
         },
         error => {
-          this.showLoading = true;
+          this.showLoading = false;
+          this.toastr.error("Unauthorized","Login Unsuccessfull")
         }
       );
   

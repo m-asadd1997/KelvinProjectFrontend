@@ -13,7 +13,7 @@
     &nbsp;
     <button mat-stroked-button (click)="goToapplicantTable()">Browse Profiles</button>
   </div>
-  <div style="margin-right: 3%;" style="cursor: pointer;" (click)="logout()">
+  <div style="margin-right: 3%;" style="cursor: pointer;" matTooltip="Logout" (click)="logout()">
     <img src="assets/icons8-logout-rounded-left-24.png" alt="">
   </div>
   <div class="row" style="float: right; margin-right: 1%;">
@@ -89,9 +89,11 @@
           <button mat-icon-button matTooltip="Delete Profile" (click)="deleteApplicantById(element.id)" color="warn">
             <mat-icon>delete</mat-icon>
           </button>
-          <button mat-icon-button matTooltip="Send Email" color="primary" (click)="sendEmailPopup(content,element.id)">
+          
+          <button *ngIf="element.recevierEmail" mat-icon-button matTooltip="Send Email" color="primary" (click)="sendEmail(element.recevierEmail,element.id)">
             <mat-icon>email</mat-icon>
           </button>
+       
         </td>
       </ng-container>
 
@@ -101,7 +103,7 @@
 
     <mat-paginator #scheduledOrdersPaginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
     </mat-paginator>
-    <ng-template #content let-modal>
+    <!-- <ng-template #content let-modal>
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -111,7 +113,6 @@
         <div class="modal-body">
           <form>
             <div class="form-group">
-              <!-- <label for="dateOfBirth">Reciever Email</label> -->
               <div class="input-group">
                 <input class="form-control" placeholder="Enter email address" name="email"
                   [(ngModel)]="responseEmail" />
@@ -126,7 +127,7 @@
         </div>
       </div>
     </ng-template>
-
+ -->
     <!-- <div *ngIf="showLoader" style="margin-left: 40%;">
       <div class="spinner-grow text-primary" role="status">
         <span class="sr-only">Loading...</span>

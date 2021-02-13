@@ -12,7 +12,7 @@
     &nbsp;
     <button mat-stroked-button (click)="goToapplicantTable()">Browse Profiles</button>
    </div>
-   <div *ngIf="checkToken()" style="margin-right: 5%;" style="cursor: pointer;" (click)="logout()">
+   <div *ngIf="checkToken()" style="margin-right: 5%;" style="cursor: pointer;" matTooltip="Logout" (click)="logout()">
     <img src="assets/icons8-logout-rounded-left-24.png" alt="">
   </div>
    <div class="row" style="float: right; margin-right: 1%;">
@@ -64,7 +64,7 @@
   <br>
 
   <div class="row">
-    <div class="col-6">
+    <div class="col-5">
       <div class="row">
         <div class="col-4">
           <span class = "font-weight-bold text-uppercase text-muted" style="font-size: small;">Documentation</span>
@@ -293,7 +293,7 @@
     </div>
     <mat-divider [vertical]="true"></mat-divider>
 
-<div class="col-4">
+<div class="col-3">
     <div class="row">
         <div class="col-8">
           <span class = "font-weight-bold text-uppercase text-muted" style="font-size: small;">Contact Information</span>
@@ -389,7 +389,7 @@
         <div class="col-6">
         </div>
         <div class="col-6">
-            <button class="btn btn-primary" (click)="openDocument(content1)">View Resume</button>
+            <button class="btn btn-primary" style="font-size: small;" (click)="openDocument(content1)">View Resume</button>
             <ng-template #content1 let-modal style="width: 700px;">
               <div class="modal-header">
                 <h4 class="modal-title" id="modal-basic-title">
@@ -427,7 +427,59 @@
 
 
 </div>
-
+<mat-divider [vertical]="true"></mat-divider>
+<div class="col-3">
+  <div class="row">
+    <div class="col-8">
+      <span class = "font-weight-bold text-uppercase text-muted" style="font-size: small;">Assignment Details</span>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-6">
+      <span class = "font-weight-bold" style="font-size: small;">Position</span>
+    </div>
+    <div class="col-6">
+        <span class = "font-weight-normal  text-muted" style="font-size: small;">{{applicantObj.position}}</span>
+      </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-6">
+      <span class = "font-weight-bold" style="font-size: small;">Wage per hour</span>
+    </div>
+    <div class="col-6">
+        <span class = "font-weight-normal  text-muted" style="font-size: small;">{{applicantObj.wage}}</span>
+      </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-6">
+      <span class = "font-weight-bold" style="font-size: small;">Company Name</span>
+    </div>
+    <div class="col-6">
+        <span class = "font-weight-normal  text-muted" style="font-size: small;">{{applicantObj.companyName}}</span>
+      </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-6">
+      <span class = "font-weight-bold" style="font-size: small;">Contact Email</span>
+    </div>
+    <div class="col-6">
+        <span class = "font-weight-normal  text-muted" style="font-size: small;">{{applicantObj.email}}</span>
+      </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-6">
+      <span class = "font-weight-bold" style="font-size: small;">Address</span>
+    </div>
+    <div class="col-6">
+        <span class = "font-weight-normal  text-muted" style="font-size: small;">{{applicantObj.addressForCompany}}</span>
+      </div>
+  </div>
+</div>
   </div>
 </mat-card>
 </div>

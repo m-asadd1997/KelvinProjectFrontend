@@ -10,6 +10,7 @@ import { JsonpInterceptor } from '@angular/common/http';
 import csc from 'country-state-city'
 import { MatStepper } from '@angular/material/stepper';
 import { MapsAPILoader } from '@agm/core';
+import { Dimensions, ImageCroppedEvent, ImageTransform } from 'ngx-image-cropper';
 @Component({
   selector: 'app-main-screen',
   templateUrl: './main-screen.component.html',
@@ -92,6 +93,16 @@ isLinear = true;
   @ViewChild('stepper') stepper: MatStepper;
   @ViewChild('search')
   public searchElementRef: ElementRef;
+  zoomvalue:any=1;
+  checkZoomInOrOut=this.zoomvalue;
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+  canvasRotation = 0;
+  rotation = 0;
+  scale = 1;
+  containWithinAspectRatio = false;
+  transform: ImageTransform = {};
+  showCropper: boolean;
   
   constructor(private _snackBar: MatSnackBar,private router:Router,
     private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute,
@@ -124,7 +135,7 @@ isLinear = true;
   }
   getPosition(): Promise<any> {
     return new Promise((resolve, reject) => {
-
+      if(window.navigator.geolocation){
       navigator.geolocation.getCurrentPosition(resp => {
 
         resolve({ lng: resp.coords.longitude, lat: resp.coords.latitude });
@@ -132,7 +143,10 @@ isLinear = true;
         err => {
           reject(err);
         });
-    });
+    }else{
+      console.log("Geolocation is not supported by this browser");
+    }
+  });
 
 
   }
@@ -345,6 +359,17 @@ openBase64InNewTab (data, mimeType) {
     }
   }
 
+  onNextVisaDetails(form:NgForm,callApi:Boolean){
+    
+      if(callApi){
+        this.savePersonalInformation(form);
+      }else{
+      this.stepper.selected.completed = true;
+      this.stepper.next();
+      }
+    
+  }
+
   onSaveApplicantForm(form:NgForm,){
     this.appFormObj.draft =false;
     this.savePersonalInformation(form);
@@ -539,6 +564,43 @@ _handleReaderLoaded(readerEvt) {
       
     }
   }
+
+  onImageChangeWithCropper(event) {
+    let reader = new FileReader();
+    this.fileChangeEvent(event)
+    if(event.target.files && event.target.files.length > 0) {
+    
+      let file = event.target.files[0];
+      if(event.target.files[0].size > 5000000){
+        // this.message.error("image size cannot be greater than 5mb", {
+        //   nzDuration: 3000
+        // });
+        this.disableSaveButton = true;
+      }
+      else{
+        this.disableSaveButton = false;
+      }
+      console.log(event.target.files[0].size)
+      reader.onload =this._handleReaderImageLoadedForCropper.bind(this);
+
+      this.appFormObj.userImage = file.type
+      console.log( this.appFormObj.userImage)
+      //console.log("1"+this.appFormObj.resumeContentType)
+      reader.readAsBinaryString(file);
+      
+    }
+
+  }
+
+  _handleReaderImageLoadedForCropper(readerEvt) {
+    var binaryString = readerEvt.target.result;
+           let base64textString= btoa(binaryString);
+           //console.log(btoa(binaryString));
+           this.appFormObj.userImage = base64textString;
+          // console.log(this.appFormObj.resume)
+          // console.log(this.companyObj.companyimage) 
+           
+   }
 
   getFileExtension = (filename) => filename.split('.').pop();
   fileExtensionAllowed(filename) {
@@ -877,6 +939,100 @@ getAddress(latitude, longitude) {
     }
 
   });
+}
+
+focusOutFunction(event){
+  this.appFormObj.addressForCompany = event.target.value
+}
+
+imageLoaded() {
+  this.showCropper = true;
+  console.log('Image loaded');
+}
+
+cropperReady(sourceImageDimensions: Dimensions) {
+  console.log('Cropper ready', sourceImageDimensions);
+}
+
+
+
+
+
+resetImage() {
+  this.scale = 1;
+  this.rotation = 0;
+  this.canvasRotation = 0;
+  this.transform = {};
+}
+
+
+
+
+  zoomCropper(a) {
+
+    this.zoomvalue = a;
+    this.transform = {
+      ...this.transform,
+      scale: this.zoomvalue
+    };
+  }
+
+
+toggleContainWithinAspectRatio() {
+  this.containWithinAspectRatio = !this.containWithinAspectRatio;
+}
+
+updateRotation() {
+  this.transform = {
+    ...this.transform,
+    rotate: this.rotation
+  };
+}
+
+
+
+
+fileChangeEvent(event: any): void {
+  
+  this.isVisible = true;
+  this.imageChangedEvent = event;
+}
+
+imageCropped(event: ImageCroppedEvent) {
+  this.croppedImage = event.base64.replace(/^data:image\/[a-z]+;base64,/, "");
+
+}
+
+
+
+
+updateCroppedImage() {
+  sessionStorage.removeItem('companyImage');
+  this.appFormObj.userImage = this.croppedImage;
+  sessionStorage.setItem('companyImage', this.appFormObj.userImage);
+  // this.logoChangeObservable.next();
+  // console.log(event, base64ToFile(event.base64));
+  // base64 to blob file
+  this.isVisible = false;
+}
+
+isVisible = false;
+
+
+
+showModal(): void {
+  this.isVisible = true;
+}
+
+handleOk(): void {
+  console.log('Button ok clicked!');
+  this.isVisible = false;
+}
+
+handleCancel(): void {
+  this.appFormObj.userImage = null; 
+  console.log('Button cancel clicked!', this.appFormObj.userImage);
+  this.isVisible = false;
 }
 
 }

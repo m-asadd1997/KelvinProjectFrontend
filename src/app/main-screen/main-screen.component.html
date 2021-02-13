@@ -37,7 +37,7 @@
       Browse Profiles
     </button>
   </div>
-  <div style="margin-right: 10%" style="cursor: pointer" (click)="logout()">
+  <div style="margin-right: 10%" style="cursor: pointer" matTooltip="Logout" (click)="logout()">
     <img src="assets/icons8-logout-rounded-left-24.png" alt="" />
   </div>
   <div class="row" style="float: right; margin-right: 0%">
@@ -159,50 +159,6 @@
                 />
               </mat-form-field>
             </div>
-            <!-- <div class="col-md-6">
-              <mat-form-field style="width:100%">
-                <mat-label>Choose a Country</mat-label>
-                <mat-select (selectionChange)="countryChangeForCompany($event)"
-                  required
-                  [(ngModel)]="countryObjForCompany"
-                  name="countryForCompany">
-                  <mat-option *ngFor="let c of countriesForCompany"
-                    [value]="c">
-                    {{c.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-md-6">
-              <mat-form-field style="width:100%">
-                <mat-label>Choose a Province/State</mat-label>
-                <mat-select (selectionChange)="provinceChangeForCompany($event)"
-                  required
-                  [(ngModel)]="provinceObjForCompany"
-                  name="provinceForCompany">
-                  <mat-option *ngFor="let p of provincesForCompany"
-                    [value]="p">
-                    {{p.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <mat-form-field style="width:100%">
-                <mat-label>Choose a City</mat-label>
-                <mat-select required
-                [(ngModel)]="cityObjForCompany"
-                  name="cityForCompany"
-                  (selectionChange)="cityChangeForCompany($event)">
-                  <mat-option *ngFor="let c of citiesForCompany"
-                    [value]="c">
-                    {{c.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div> -->
           </div>
           <mat-card [class.mat-elevation-z3]="true">
             <div style="position: relative;">
@@ -215,13 +171,17 @@
                 background: white;
                 z-index: 1000;
                 margin-top: 54px;
-                position: absolute;"
+                position: absolute;
+                width:80%;
+                margin-left: 10%;"
                 name="location"
                 class="search"
                 [(ngModel)]="appFormObj.addressForCompany"
                 matInput
                 placeholder="Type address here"
-                #search> 
+                (focusout)="focusOutFunction($event)"
+                #search
+                > 
             
               
               <agm-map style="height:450px;"
@@ -240,7 +200,7 @@
           <div>
             <button mat-raised-button color="primary" (click)="onNextAssignmentDetail(myForm,false)" >Next</button>
             &nbsp;&nbsp;
-            <button mat-raised-button class= "mat-save"  (click)="onNextAssignmentDetail(myForm,true)">Save</button>
+            <button mat-raised-button style="background-color: rgb(75, 184, 75);color: white;"  (click)="onNextAssignmentDetail(myForm,true)">Save</button>
           </div>
         </mat-step>
           <mat-step completed="false">
@@ -254,6 +214,25 @@
               </div>
             </div>
           <div class="row">
+            <nz-modal  [(nzVisible)]="isVisible" nzTitle="Resize your image" (nzOnCancel)="handleCancel()" (nzOnOk)="updateCroppedImage()">
+              <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+              [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="1/1" 
+              [resizeToWidth]="100" backgroundColor="lightgray" [resizeToHeight]="100" [cropperMinWidth]="100"
+              [roundCropper]="true" [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'center'"
+              [style.display]="showCropper ? null : 'none'" [imageQuality]="100" (imageCropped)="imageCropped($event)"
+              (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)">
+            </image-cropper>
+        
+            <div class="row">
+        
+              <div class="col-lg-5 offset-4">
+            
+                <nz-slider [nzMin]="1" (ngModelChange)="zoomCropper($event)" [nzMax]="10" [nzStep]="0.5"
+                  [(ngModel)]="zoomvalue" name="userSlider"></nz-slider>
+              
+              </div>
+            </div>
+            </nz-modal>
             <div class="col-md-12">
                 <img
                 
@@ -261,7 +240,8 @@
                     ? 'data:image/jpeg;base64,' + appFormObj.userImage
                     : 'assets/user.png'"
                 alt="Avatar"
-                class="avatar" />
+                class="avatar" 
+                />
                 <label
                   style="
                     margin-left: 2%;
@@ -273,8 +253,8 @@
                   <input
                     type="file"
                     id="imgFile"
-                    (change)="onImageChange($event, 'userImage')"
-                    
+                    (change)="onImageChangeWithCropper($event)"
+                    name="userImage"
                   />
                 </label>
               </div>
@@ -422,11 +402,11 @@
               </div>
           </div>
           <div>
-              <button mat-raised-button color="accent" matStepperPrevious>Back</button>
+              <button mat-raised-button  color="primary" matStepperPrevious>Back</button>
               &nbsp;&nbsp;
             <button mat-raised-button color="primary" (click)="onNextPersonalInformation(myForm,false)">Next</button>
             &nbsp; &nbsp;
-            <button mat-raised-button class= "mat-save"  (click)="onNextPersonalInformation(myForm,true)">Save </button>
+            <button mat-raised-button  style="background-color: rgb(75, 184, 75);color: white;"  (click)="onNextPersonalInformation(myForm,true)">Save </button>
           </div>
         </mat-step>
         <mat-step completed="false">
@@ -510,11 +490,11 @@
           </div>
         </div>
         <div>
-          <button mat-raised-button color="accent" matStepperPrevious>Back</button>
+          <button mat-raised-button  color="primary" matStepperPrevious>Back</button>
           &nbsp;&nbsp;
           <button mat-raised-button color="primary" (click)="onNextAddressDetail(myForm,false)" >Next</button>
           &nbsp;&nbsp;
-          <button mat-raised-button class= "mat-save"  (click)="onNextAddressDetail(myForm,true)">Save </button>
+          <button mat-raised-button  style="background-color: rgb(75, 184, 75);color: white;"  (click)="onNextAddressDetail(myForm,true)">Save </button>
         </div>
       </mat-step>
       <mat-step completed="false">
@@ -647,11 +627,11 @@
          
 
           <div>
-            <button mat-raised-button color="accent" matStepperPrevious>Back</button>
+            <button mat-raised-button  color="primary" matStepperPrevious>Back</button>
           &nbsp;&nbsp;
             <button mat-raised-button color="primary" (click)="onNextEmergencyContact(myForm,false)">Next</button>
             &nbsp;&nbsp;
-            <button mat-raised-button class= "mat-save"  (click)="onNextEmergencyContact(myForm,true)">Save</button>
+            <button mat-raised-button  style="background-color: rgb(75, 184, 75);color: white;"  (click)="onNextEmergencyContact(myForm,true)">Save</button>
           </div>
         </mat-step>
         
@@ -768,10 +748,18 @@
               >
             </div>
           </div>
-         
-          
+          <div>
+            <button mat-raised-button  color="primary" matStepperPrevious>Back</button>
+          &nbsp;&nbsp;
+            <button mat-raised-button color="primary" (click)="onNextVisaDetails(myForm,false)">Next</button>
+            &nbsp;&nbsp;
+            <button mat-raised-button style="background-color: rgb(75, 184, 75);color: white;"  (click)="onNextVisaDetails(myForm,true)">Save</button>
+          </div>
+        </mat-step>
+          <mat-step completed="false">
+            <h3>Document Upload</h3>
           <br />
-
+           <!-- Upload Security clearance -->
           <div class="row">
             <div class="col-md-6">
               <mat-label style="font-size: 1em">Upload Security clearance</mat-label>
@@ -821,13 +809,17 @@
                 </ng-template>
                 
               </div>
-              <br />
+            </div>
+            <div class="col-md-6">
               <input
                 type="file"
                 (change)="onImageChange($event, 'securityClearance')"
                 required
               />
             </div>
+          </div>
+          <br><br>
+          <div class="row">
             <div class="col-md-6">
               <mat-label style="font-size: 1em">Upload Employee application</mat-label>
               <br />
@@ -876,7 +868,8 @@
                 </ng-template>
                 
               </div>
-              <br />
+            </div>
+            <div class="col-md-6">
               <input
                 type="file"
                 (change)="onImageChange($event, 'employeeApplication')"
@@ -885,6 +878,7 @@
             </div>
           </div>
           <br><br>
+          <!-- Upload Employee ID -->
           <div class="row">
             <div class="col-md-6">
               <mat-label style="font-size: 1em">Upload Employee ID</mat-label>
@@ -934,21 +928,24 @@
                 </ng-template>
                 
               </div>
-              <br />
+            </div>
+            <div class="col-md-6">
               <input
                 type="file"
                 (change)="onImageChange($event, 'employeeIdentification')"
                 required
               />
             </div>
-            <div class="col-md-5">
+          </div>
+          <br><br>
+          <div class="row">
+            <div class="col-md-6">
               <mat-label style="font-size: 1em; text-align: center"
                 >Upload Resume</mat-label
               >
-              <br /><br />
-              <input type="file" accept=".pdf,.docx,.doc" (change)="onFileChange($event)" required />
-                <br>
-                <br>
+              
+              
+               
                 <div *ngIf="appFormObj.resume!=null">
                   <button 
                   (click)="openDocument(content1)"
@@ -992,9 +989,12 @@
                 </div>
               </ng-template>
             </div>
+            <div class="col-md-6">
+              <input type="file" accept=".pdf,.docx,.doc" (change)="onFileChange($event)" required />
+            </div>
           
           </div>
-
+          <br><br>
           <div class="row">
             <div class="col-md-6">
               <mat-label style="font-size: 1em">Other Certification (Optional)</mat-label>
@@ -1044,22 +1044,23 @@
                 </ng-template>
                 
               </div>
-              <br />
+            </div>
+            <div class="col-md-6">
               <input
                 type="file"
                 (change)="onImageChange($event, 'otherCertification')"
               />
-              <br><br>
+              
             </div>
             
           </div>
-          
+          <br><br>
           <div>
-            <button mat-raised-button color="accent" matStepperPrevious>Back</button>
+            <button mat-raised-button  color="primary" matStepperPrevious>Back</button>
           &nbsp;&nbsp;
             <button mat-raised-button color="primary" (click)="onNextSupportingDoc(myForm,false)" >Next</button>
           &nbsp;&nbsp;
-            <button mat-raised-button class= "mat-save" (click)="onNextSupportingDoc(myForm,true)" >Save</button>
+            <button mat-raised-button  style="background-color: rgb(75, 184, 75);color: white;" (click)="onNextSupportingDoc(myForm,true)" >Save</button>
           </div>
         </mat-step>
         <mat-step completed="false">
@@ -1108,33 +1109,16 @@
                 [disabled]="formValidation() || disableSaveButton"
                 (click)="onSaveApplicantForm(myForm)"
                 mat-raised-button
-                class= "mat-save"
+                style="background-color: rgb(75, 184, 75);color: white;"
               >
                 Save
               </button>
             </div>
            
-            <!-- <div *ngIf="showSaveLoading" class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
-            </div> -->
-            <div class="col-md-2" >
-              
-              <div *ngIf="responseStatus">
-                <button
-                  mat-raised-button
-                  color="primary"
-                  (click)="sendEmail()"
-                >
-                  Email
-                </button>
-              </div>
-            </div>  
+           
             <div class="col-md-2">
-              <button mat-raised-button color="accent" matStepperPrevious>Back</button>
+              <button mat-raised-button color="primary" matStepperPrevious>Back</button>
             </div>
-            <!-- <div *ngIf="showloading" class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
-            </div> -->
           </div>
          
         </mat-step>

@@ -34,7 +34,9 @@ export class ViewportfolioComponent implements OnInit {
   constructor(private exportAsService: ExportAsService,private router: Router,private applicantService: ApplicantServiceService,private activateRoute: ActivatedRoute,private modalService: NgbModal) { }
 
   ngOnInit(): void {
-    this.url = this.router.url
+    this.url = location.hash.substr(1,location.hash.length)
+    console.log("by hash ==== >",location.hash.substr(1,location.hash.length));
+    
     
     
     this.id = this.activateRoute.snapshot.params['id'];
@@ -53,6 +55,8 @@ export class ViewportfolioComponent implements OnInit {
     this.showLoading = true;
     this.applicantService.getPortfolioDataById(id).subscribe(d=>{
        this.applicantObj = (d.result)
+       
+       
        this.socialLinks = JSON.parse(d.result.socialMediaLinks)
       
        
@@ -176,6 +180,8 @@ openDocument(content1) {
 
 
 checkLinkExpiry(){
+  // console.log(this.url);
+  
   this.token = this.activateRoute.snapshot.params["token"];
   this.applicantService.checkTokenExpiry(this.token).subscribe(d=>{
     if(d.status==200){

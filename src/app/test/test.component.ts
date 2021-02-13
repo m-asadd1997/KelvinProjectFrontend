@@ -40,6 +40,9 @@ export class TestComponent implements OnInit {
     this.applicantService.getApplicantFields().subscribe(data => {
     
       this.tableData = data;
+      // this.responseEmail = data.recevierEmail
+      // console.log(this.tableData.recevierEmail);
+      
       
       if(this.tableData)
       {
@@ -122,12 +125,12 @@ export class TestComponent implements OnInit {
 }
 
 viewLinkObj: ViewLink = new ViewLink()
-sendEmail(){
-  if(this.selectedIdForEmail){
-    if(this.responseEmail!= null){
+sendEmail(email,id){
+  if(id){
+    if(email!= null){
       this.showloading = true;
-      this.viewLinkObj.email = this.responseEmail;
-      this.applicantService.sendEmail(this.viewLinkObj,this.selectedIdForEmail).subscribe(res=>{
+      this.viewLinkObj.email = email;
+      this.applicantService.sendEmail(this.viewLinkObj,id).subscribe(res=>{
         
         this._snackBar.open(res.message,"X",{duration: 3000});
         this.showloading = false;

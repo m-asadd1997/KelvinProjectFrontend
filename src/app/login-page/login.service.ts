@@ -8,8 +8,9 @@ import { Observable } from 'rxjs';
 export class LoginService {
 
   constructor(private http:HttpClient) { }
-
+  
   checkUserandPass(name: string, pwd: string):Observable <any> {
+  
     let user = {
       username:name,
       password:pwd

@@ -12,7 +12,7 @@ const routes: Routes = [
     path:'',component: LoginPageComponent
   },
   {
-    path:'applicantForm', component: MainScreenComponent
+    path:'applicantForm',component: MainScreenComponent
   },
   {
     path:'applicanttable',component:ApplicantTableComponent
